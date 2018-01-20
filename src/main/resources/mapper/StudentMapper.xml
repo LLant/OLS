@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.gdpu.ols.mapper.StudentMapper">
+    <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
+    <resultMap id="student" type="org.gdpu.ols.model.Student">
+        <id column="id" property="studentId"></id>
+        <result column="studentName" property="studentName"/>
+        <result column="password" property="studentPassword"/>
+        <result column="email" property="studentEmail"/>
+        <result column="sex" property="studentSex"/>
+    </resultMap>
+
+    <!--获取所有的学生-->
+    <select id="getStudentCount" resultType="int">
+        SELECT count(id) FROM student
+    </select>
+
+    <!--根据studentName获取学生信息-->
+    <select id="getStudentByName" resultMap="student" parameterType="java.lang.String">
+        SELECT id,studentName,sex,email,password
+        FROM student
+        WHERE studentName=#{item.studentName}
+    </select>
+
+    <!--批添加学生信息-->
+    <insert id="addStudentBatch" useGeneratedKeys="true" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Integer" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO student(studentName,sex,email,password)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.studentName},#{item.studentSex},#{item.studentEmail},#{item.studentPassword})
+        </foreach>
+    </insert>
+    <!--批更新学生信息-->
+    <update id="updateStudentBatch" parameterType="java.util.List">
+        UPDATE student
+        <foreach collection="list" item="item" index="index" separator=",">
+            SET studentName=#{item.studentName},sex=#{item.studentSex},
+            email=#{item.studentEmail},password=#{item.studentPassword}
+            WHERE id=#{item.studentId}
+        </foreach>
+    </update>
+    <!--验证用户信息-->
+    <select id="authenticStudent" parameterType="java.lang.String" resultMap="student">
+        SELECT id,studentName,sex,email,password FROM student WHERE studentName=#{studentName}
+        UNION
+        SELECT id,studentName,sex,email,password FROM student WHERE email=#{studentEmail}
+    </select>
+</mapper>

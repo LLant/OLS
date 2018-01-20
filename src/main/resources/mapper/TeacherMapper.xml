@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.gdpu.ols.mapper.TeacherMapper">
+    <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
+    <resultMap id="student" type="org.gdpu.ols.model.Teacher">
+        <id column="id" property="teacherId"></id>
+        <result column="teacherName" property="teacherName"/>
+        <result column="realName" property="realName"/>
+        <result column="password" property="teacherPassword"/>
+        <result column="email" property="teacherEmail"/>
+        <result column="sex" property="teacherSex"/>
+        <result column="degree" property="degree"/>
+        <result column="university" property="university"/>
+    </resultMap>
+
+    <sql id="teacherColumn">
+        id,teacherName,realName,password,email,sex,degree,university
+    </sql>
+    <!--批量添加老师信息-->
+    <insert id="addTeacherBatch" parameterType="java.util.List" useGeneratedKeys="true">
+        <selectKey resultType="java.lang.Integer" order="AFTER">
+            SELECT LAST_INSERT_id()
+        </selectKey>
+        INSERT INTO teacher(teacherName,realName,password,email,sex,degree,university)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.teacherName},#{item.realName},#{item.teacherPassword},#{item.teacherEmail},
+            #{item.teacherSex},#{item.degree},#{item.university})
+        </foreach>
+    </insert>
+
+    <!--验证用户信息-->
+    <select id="authenticTeacher" parameterType="java.lang.String" resultMap="student">
+        SELECT
+        <include refid="teacherColumn"/> FROM teacher WHERE teacherName=#{teacherName}
+        UNION
+        SELECT
+        <include refid="teacherColumn"/> FROM teacher WHERE email=#{teacherEmail}
+    </select>
+</mapper>

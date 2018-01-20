@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.gdpu.ols.mapper.CoursewareMapper">
+    <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
+    <resultMap id="student" type="org.gdpu.ols.model.Courseware">
+        <id column="id" property="coursewareId"></id>
+        <result column="coursewareName" property="coursewareName"/>
+        <result column="author" property="author"/>
+        <result column="examiner" property="examiner"/>
+        <result column="coursewarePublishDate" property="coursewarePublishDate"/>
+        <result column="coursewareStatus" property="coursewareStatus"/>
+    </resultMap>
+
+</mapper>

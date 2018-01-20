@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.gdpu.ols.mapper.AdminMapper">
+    <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
+    <resultMap id="student" type="org.gdpu.ols.model.Admin">
+        <id column="id" property="adminId"></id>
+        <result column="adminName" property="adminName"/>
+        <result column="password" property="adminPassword"/>
+        <result column="lastestUpdateUser" property="lastestUpdateUser"/>
+        <result column="lastestLoginDate" property="lastestLoginDate"/>
+        <result column="lastestUpdateDate" property="lastestUpdateDate"/>
+    </resultMap>
+
+    <sql id="column">
+        id,adminName,password,lastestUpdateUser,lastestLoginDate,lastestUpdateDate
+    </sql>
+
+    <select id="selectOne" parameterType="java.lang.Integer" resultType="org.gdpu.ols.model.Admin">
+        SELECT
+        <include refid="column"/>
+        FROM administrators
+        WHERE  id=#{adminId}
+    </select>
+
+    <!--批添加学生信息-->
+    <insert id="addAdminBatch" useGeneratedKeys="true" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Integer" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO admin(adminName,password,lastestUpdateUser,lastestLoginDate,lastestUpdateDate)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.adminName},#{item.adminPassword},#{item.lastestUpdateUser},
+            #{item.lastestLoginDate},#{item.lastestUpdateDate})
+        </foreach>
+    </insert>
+
+</mapper>
