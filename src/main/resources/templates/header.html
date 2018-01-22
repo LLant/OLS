@@ -1,0 +1,358 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<div class="header podcast-header">
+    <div class="container header-container">
+        <div class="row podcast-header-top">
+            <div class="col-sm-6">
+                <a class="logo" href="#">
+                    <h1>学习系统</h1>
+                    <!-- <img src="/images/logo-text-only.png" alt="PHP Roundtable" /> -->
+                </a>
+            </div>
+            <div class="col-sm-6">
+                <p class="lead"></p>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-default navbar-inverse" role="navigation" style="margin-bottom: 0px;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">home</a></li>
+                    <li><a href="#">item1</a></li>
+                    <li><a href="#">item2</a></li>
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" placeholder="Search" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-success">搜索</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" type="button" data-target="#login" data-toggle="modal" id="button1">登录</a></li>
+                    <li><a href="#" type="button" data-target="#register" data-toggle="modal" id="button2">注册</a></li>
+                    <li class="dropdown" style="display: none;"  id="button3">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false" id="theUserName"></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">个人中心</a></li>
+                            <li><a href="#">登出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<script>
+    $(document).ready(
+        isLogin()
+    );
+    function isLogin() {
+        $.ajax({
+            url:'http://127.0.0.1:8080/OIS/isLogin',
+            method:'POST',
+            success:function (data) {
+                console.log("isLogin",data);
+                if(data=="true"){
+                    $("#button1").css('display','none');
+                    $("#button2").css('display','none');
+                    $("#button3").css('display','block');
+                }else {
+                    $("#button3").css('display','none');
+                    $("#button1").css('display','block');
+                    $("#button2").css('display','block');
+                }
+            }
+        })
+    }
+</script>
+<!--------------------------------------------登录---------------------------------------------------->
+<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">
+                    <div style="margin-top: 20px;text-align:center;">
+                        <span>登录</span>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="loginUsername" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="loginUsername" placeholder="用户名/邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword" class="col-form-label">Password:</label>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="密码">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div id="loginTip" class="alert alert-warning" role="alert" style="text-align: center;" hidden="true">
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="Login();">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style type="text/css">
+    h5 span{
+        font-size: 24px;
+    }
+</style>
+<script type="text/javascript">
+    function Login(){
+        var loginTip="";
+        //console.log("1111111111111111111111");
+        console.log($("#loginUsername").val());
+        if($("#loginUsername").val()==''){
+            loginTip="用户名或邮箱不能为空";
+        }else{
+            if($("#loginPassword").val()==''){
+                loginTip="密码不能为空";
+            }else{
+                loginTip="";
+            }
+        }
+
+        if(loginTip!=''){
+            $("#loginTip").html(loginTip);
+            $("#loginTip").prop("hidden",false);
+            setTimeout(function(){
+                $("#loginTip").prop("hidden",true);
+            },1000*10);
+            return;
+        }else{
+            $("#loginTip").prop("hidden",true);
+        }
+
+        var data={"usernameOrEmail":$("#loginUsername").val(),"password":$("#loginPassword").val()};
+        $.ajax({
+            method:'GET',
+            url:'http://127.0.0.1:8080/OIS/login/',
+            data:data,
+            type:'application/json;charset=UTF-8',
+            success:function(data){
+                //var data = data.parseJSON();
+                console.log("data",data.toString());
+                console("success login",data);
+                if(data.resultCode=="9999"){
+                    $("#login").modal("hide");
+                    isLogin();
+                    $("#theUserName").text(data.data.studentName);
+                }else{
+                    loginTip=data.resultMessage;
+                    $("#loginTip").prop(loginTip);
+                    $("#loginTip").prop("hidden",false);
+                    setTimeout(function(){
+                        $("#loginTip").prop("hidden",true);
+                    },1000*10);
+                }
+            },
+            error:function(data){
+                loginTip=data.resultMessage;
+                $("#loginTip").prop(loginTip);
+                $("#loginTip").prop("hidden",false);
+                setTimeout(function(){
+                    $("#loginTip").prop("hidden",true);
+                },1000*10);
+            }
+        });
+    };
+</script>
+<!------------------------------------------------------------------------------------------------>
+<!--------------------------------------------注册---------------------------------------------------->
+<div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">
+                    <div style="margin-top: 20px;text-align:center;">
+                        <span>用户注册</span>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group row">
+                        <label for="registerUsername" class ="col-sm-2 col-form-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="registerUsername" placeholder="用户名">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="registerPassword" class ="col-sm-2 col-form-label">密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="registerPassword" placeholder="密码">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="verifyPassword" class ="col-sm-2 col-form-label">确认密码</label>
+                        <div class="col-sm-10">
+                            <input id="verifyPassword" type="password" class="form-control" placeholder="确认密码">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="email" class ="col-sm-2 col-form-label">邮箱</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="email" placeholder="邮箱">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="verifyCode" class ="col-sm-2 col-form-label">验证码</label>
+                        <div class=" col-sm-6">
+                            <input id="verifyCode" type="text" class="form-control" placeholder="验证码不区分大小写">
+                        </div>
+                        <button type="button" class="btn btn-info col-sm-3" onclick="GenerateCode(this);">
+                            点击发送邮箱验证码</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div id="registerTip" class="alert alert-warning" role="alert" style="text-align: center;" hidden="true">
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="Register();">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/common.js"></script>
+<style type="text/css">
+    h5 span{
+        font-size: 24px;
+    }
+    .row label{
+        text-align: right;
+        margin-top: 8px;
+    }
+</style>
+<script type="text/javascript">
+    var code="";
+    function GenerateCode(obj){
+        code=GetCode();
+        console.log("code:",code);
+        var setVerifyCodeUrl="";
+        $.ajax({
+            async:false,
+            method:'POST',
+            url:setVerifyCodeUrl,
+            data:{"code":code},
+            type:'JSON',
+            success:function(data){
+
+            },
+            error:function(data){
+            }
+        });
+
+        var _this=obj;
+        var countdown=60;
+        var intervalId=setInterval(function(){
+            settime(countdown,_this);
+            if(countdown>=1){
+                countdown--;
+            }else{
+                window.clearInterval(intervalId);
+            }
+        },1000);
+    }
+
+    function settime(countdown,obj){
+        //console.log("obj",obj);
+        if(countdown==0){
+            code="";
+            obj.removeAttribute("disabled");
+            $(obj).text("点击发送邮箱验证码");
+        }else{
+            obj.setAttribute("disabled",true);
+            $(obj).text(countdown+"s后重新发送");
+
+        }
+    }
+
+
+    function Register(){
+        var registerTip="";
+        if ($("#registerUsername").val()=='') {
+            registerTip="用户名不能为空";
+        }else{
+            if($("#registerPassword").val()==''){
+                registerTip="密码不能为空";
+            }else{
+                if($("#verifyPassword").val()!==$("#registerPassword").val()){
+                    registerTip="前后密码不一致";
+                }else{
+                    if($("#email").val()==''){
+                        registerTip="邮箱不能为空";
+                    }else{
+                        if(!isEmail($("#email").val())){
+                            registerTip="邮箱格式不正确";
+                        }else{
+                            if ($("#verifyCode").val()=='') {
+                                registerTip="请输入验证码";
+                            }else{
+                                if($("#verifyCode").val().toUpperCase()!=code){
+                                    registerTip="验证码错误";
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+        if(registerTip!=''){
+            $("#registerTip").html(registerTip);
+            $("#registerTip").prop("hidden",false);
+            setTimeout(function(){
+                $("#registerTip").prop("hidden",true);
+            },1000*10);
+            return;
+        }else{
+            $("#registerTip").prop("hidden",true);
+        }
+
+        var registerUrl;
+        var data={"username":$("#registerUsername").val(),"password":$("#registerPassword").val(),"email":$("#email").val()};
+        $.ajax({
+            method:'POST',
+            url:registerUrl,
+            data:data,
+            type:'JSON',
+            success:function(data){
+
+            },
+            error:function(data){
+
+            }
+        });
+    }
+</script>
+<!------------------------------------------------------------------------------------------------>
+</html>

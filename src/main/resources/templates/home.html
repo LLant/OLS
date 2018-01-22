@@ -1,66 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>OIS</title>
     <link type="text/css" href="/css/bootstrap.css" rel="stylesheet"/>
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <script type="text/javascript" src="/js/footer.js"></script>
     <link href="/css/carousel.css" rel="stylesheet"/>
     <link href="/css/common.css" rel="stylesheet"/>
     <style type="text/css">
         #content-1,#content-2{
             box-shadow: 0 2px 8px 0 rgba(7,17,27,.06);
         }
+        body{
+            padding-bottom: 0px;
+        }
     </style>
 </head>
 <body>
-<div class="header podcast-header">
-    <div class="container header-container">
-        <div class="row podcast-header-top">
-            <div class="col-sm-6">
-                <a class="logo" href="#">
-                    <h1>学习系统</h1>
-                    <!-- <img src="/images/logo-text-only.png" alt="PHP Roundtable" /> -->
-                </a>
-            </div>
-            <div class="col-sm-6">
-                <p class="lead"></p>
-            </div>
-        </div>
-    </div>
-    <nav class="navbar navbar-default navbar-inverse" role="navigation" style="margin-bottom: 0px;">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">home</a></li>
-                    <li><a href="#">item1</a></li>
-                    <li><a href="#">item2</a></li>
-                </ul>
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search" class="form-control" />
-                    </div>
-                    <button type="submit" class="btn btn-success">搜索</button>
-                </form>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">登录</a></li>
-                    <li><a href="#">注册</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</div>
-
+<div id="header" th:include="header"></div>
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
 
     <ol class="carousel-indicators">
@@ -230,7 +188,7 @@
 
         <!-- /.row -->
     </div>
-    <div id="footer"></div>
 </div>
+<div id="footer" th:include="footer"></div>
 </body>
 </html>

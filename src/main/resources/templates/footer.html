@@ -1,18 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>footer</title>
-</head>
-<body>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <style>
+        .copyright{
+            padding-bottom: 28px;
+            padding-top: 28px;
+            text-align: center;
+            background-color: #111;
+            font-size: 13px;
+            color: #555;
+            border-top: 1px solid #303030;
+            margin-bottom: 0px;
+        }
+    </style>
+
+
+<div th:fragment="copyright">
 <div class="copyright">
-    <div class="container">
         <div class="row">
-            <div class="col-sm-12"><span>Copyright © <a href="#">OIS官网</a></span> | <span><a
-                    href="#" target="_blank">GUPD</a></span> | <span>信工</span>
+            <div class="col-sm-12"><span>Copyright © OIS官网</span> | <span>GUPD</span> | <span>信工</span>
             </div>
-        </div>
     </div>
 </div>
-</body>
+</div>
+
 </html>

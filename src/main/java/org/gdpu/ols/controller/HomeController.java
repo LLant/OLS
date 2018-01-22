@@ -41,12 +41,23 @@ public class HomeController extends BaseController {
         return "home";
     }
 
-    @PostMapping("/login")
+    @ResponseBody
+    @PostMapping("/isLogin")
+    public Boolean isLogin(HttpSession session){
+        if(session.getAttribute("user")!=null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @GetMapping("/login")
     @ResponseBody
     public ResponseBean login(@RequestParam(defaultValue = "") String usernameOrEmail,
                          @RequestParam(defaultValue = "") String password,
                          @RequestParam(defaultValue = "1") Integer role, HttpSession session) {
 
+        System.out.println(usernameOrEmail+","+password);
         responseBean = new ResponseBean();
         if ("".equals(usernameOrEmail) || "".equals(password)) {
             responseBean.setResultCode(ERROR_CODE);
@@ -85,6 +96,7 @@ public class HomeController extends BaseController {
                 }
             }
         }
+        //System.out.println(responseBean.toString());
         return responseBean;
     }
 }
