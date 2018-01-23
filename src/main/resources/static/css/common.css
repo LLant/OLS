@@ -5,3 +5,66 @@ body{
      -khtml-user-select:none; /*早期浏览器*/
      user-select:none;
 }
+body .content{
+     -moz-box-shadow:0 2px 4px 0 rgba(7,17,27,.06);
+     box-shadow:0 2px 4px 0 rgba(7,17,27,.06);
+     margin-left: auto;
+     margin-right: auto;
+     padding: 36px 0 48px;
+}
+.row .types-title{
+     position: relative;
+     font-size: 14px;
+     color: #93999F;
+     letter-spacing: .6px;
+     line-height: 36px;
+     text-align: center;
+}
+.row .types-title em {
+     font-size: 20px;
+     font-weight: 600;   /*字体粗细*/
+     color: #4D555D;
+     margin: 0 3px;
+}
+.row .types-title span{
+     color: rgb(212, 106, 64);
+     width: 56px;
+     height: 36px;
+}
+.item{
+     padding: 24px 32px 32px;
+     box-sizing: border-box;
+     background: #fff;
+     box-shadow: 0 4px 8px 0 rgba(7,17,27,.05);
+     border-radius: 8px;         /*圆角边框*/
+     transition: all .3s;    /*transition 属性是一个简写属性，用于设置四个过渡属性*/
+     margin-top: 18px;
+     margin-bottom:18px;
+}
+.item .article-label{
+     line-height: 16px;
+     margin-bottom: 8px;
+     display: inline-block;
+     font-size: 12px;
+     color: rgba(0,140,200,.6);
+}
+.article-content{
+     font-size: 12px;
+     color: #4D555D;
+     line-height: 24px;
+     text-align: justify;
+     word-break: break-all;
+     font-weight: 400;
+     margin-top:8px;
+}
+.article-content .bottom-info{
+     font-size: 12px;
+     color: #93999F;
+     line-height: 24px;
+     margin-top: 12px;
+     font-weight: 400;
+}
+.item .bottom-info a{
+     color: rgba(0,140,200,.6);
+     float: right;
+}

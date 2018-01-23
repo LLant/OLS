@@ -1,0 +1,71 @@
+a{
+    text-decoration: none!important;
+}
+.container{
+    /* width:1200px; */
+    margin:0 auto;
+}
+#projects-list .category-list-section {
+    position: relative;
+    /* margin: 40px 0 50px;*/
+    margin: 40px 0 5px;
+    padding: 20px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    /* background-color: #FBFBFB;
+     border: 1px solid #EAEAEA;*/
+    -moz-box-shadow: 0px 1px 0px #888888; /* 老的 Firefox */
+    box-shadow: 0px 1px 0px #888888;
+}
+#projects-list .category-list-section .list-left{
+    position: absolute;
+}
+#projects-list .category-list-section .list-main{
+    margin-left: 100px;
+}
+.itemUl{
+    margin-bottom: 20px;
+}
+.itemUl li{
+    list-style: none;
+    display: inline-block;
+    margin-right: 20px;
+    padding:0 2px;
+    height: 30px;
+    border-radius: 15px;
+}
+.itemUl li span{
+    padding: 0 10px;
+    line-height: 30px;      /*设置行间的距离（行高）*/
+    text-align: center;
+    color: #6A6A6A;
+}
+.itemUl li a{
+    padding:0 10px;
+    line-height: 30px;
+    text-align: center;
+    color: #6A6A6A;
+}
+/*ul li:hover{
+    background-color: #DEDEDE;
+
+}*/
+
+.itemUl li.active{
+    background-color: #CD3333;
+}
+
+.itemUl li.active:hover{
+    background-color: #CD3333;
+}
+
+.itemUl li.active a{
+    color: #fff;
+
+}
+.itemUl :last-child{
+    margin-bottom: 0px;
+}
+div .thumbnail:hover{
+    border: 1px solid #ddd;
+}

@@ -51,6 +51,11 @@ public class HomeController extends BaseController {
         }
     }
 
+    @GetMapping("/course")
+    public String Course(){
+        return "course";
+    }
+
     @GetMapping("/login")
     @ResponseBody
     public ResponseBean login(@RequestParam(defaultValue = "") String usernameOrEmail,
