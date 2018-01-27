@@ -1,0 +1,155 @@
+.wrapper{
+	margin: 0 auto;
+	text-align: center;
+	display: block;
+	background-color: #090909;
+	border-bottom: 1px solid #d9dde1;
+}
+
+.row .mb40{
+	margin-top: 28px;
+	margin-bottom: 28px;
+	padding: 0 24px 24px;
+	border-bottom: 1px solid #d9dde1;
+}
+.row .mb40 h4{
+	font-weight: 700;
+	font-size: 16px;
+}
+.teacher-info {
+    padding: 24px 0 20px 80px;
+    overflow: hidden;
+}
+.teacher-info img {
+    float: left;
+    margin-left: -80px;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+}
+.teacher-info .tit {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.teacher-info .tit a {
+    font-weight: 700;
+    color: #07111b;
+    text-decoration: none;
+}
+.teacher-info .job {
+    font-size: 12px;
+    color: #71777b;
+}
+.course-info-tip {
+	width: 90%;
+    position: relative;
+    padding: 24px;
+    background-color: #edf1f2;
+    color: #4d555d;
+    margin-bottom: 12px;
+}
+dl {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+.course-info-tip dd {
+    font-size: 12px;
+    line-height: 24px;
+    white-space: pre-line;
+}
+.autowrap {
+	margin: 0;
+    word-wrap: break-word;		/*允许长单词或 URL 地址换行到下一行*/
+    word-break: break-all;		/*可以让浏览器实现在任意位置的换行*/
+}
+dd {
+	margin: 0;
+	padding: 0;
+    display: block;
+    -webkit-margin-start: 40px;
+}
+
+.row .content{
+	margin-top: 28px;
+	margin-bottom: 28px;
+	margin-left: 25px;
+}
+.row .content .course-brief {
+	
+    font-size: 14px;
+    color: #4d555d;
+    line-height: 28px;
+    word-break: break-all;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+p {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+.mod-tab-menu .nav-tabs{
+	margin-top: 20px;
+	margin-left:20px;
+}
+.mod-tab-menu .nav .active:hover{
+    color: #f01400;
+    /*text-decoration: none;*/
+}
+.mod-qa-list {
+    padding: 20px 0;
+    border-bottom: 1px solid #d9dde1;
+    overflow: hidden;		/*如果溢出元素内容区域的话隐藏*/
+}
+.mod-qa-list .qa-medias {
+    width: 96px;
+    overflow: hidden;
+    text-align: center;
+	float: left;
+}
+.mod-qa-list .qa-content {
+	margin-top: 5px;
+    padding-right: 20px;
+    min-height: 85px;
+    position: relative;
+    overflow: hidden;
+}
+.qa-header .name {
+    display: block;
+    max-width: 100%;
+    color: #93999f;
+    font-size: 12px;
+    line-height: 14px;
+    padding-bottom: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.mod-qa-list .qa-header{
+	margin-top: 10px;
+}
+.mod-qa-list .qa-header .qa-tit {
+    font-size: 16px;
+    font-weight: 700;
+    color: #14191e;
+    line-height: 24px;
+}
+.qa-header .name, .mod-qa-list .qa-header .qa-tit, .replydes {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.replycont {
+    margin-top: 10px;
+    position: relative;
+}
+.mod-qa-list .qa-content .qa-footer {
+    margin-top: 12px;
+    color: #93999f;
+    font-size: 12px;
+}

@@ -52,10 +52,13 @@ public class HomeController extends BaseController {
     }
 
     @GetMapping("/course")
-    public String Course(){
+    public String course(){
         return "course";
     }
-
+    @GetMapping("/course/{id:\\d{6}}")
+    public String courseDetail(@PathVariable int id){
+        return "video";
+    }
     @GetMapping("/login")
     @ResponseBody
     public ResponseBean login(@RequestParam(defaultValue = "") String usernameOrEmail,
