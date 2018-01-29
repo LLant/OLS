@@ -5,7 +5,7 @@
 <!-- namespace必须指向Dao接口 -->
 <mapper namespace="org.gdpu.ols.mapper.TeacherMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
-    <resultMap id="student" type="org.gdpu.ols.model.Teacher">
+    <resultMap id="teacher" type="org.gdpu.ols.model.Teacher">
         <id column="id" property="teacherId"></id>
         <result column="teacherName" property="teacherName"/>
         <result column="realName" property="realName"/>
@@ -33,7 +33,7 @@
     </insert>
 
     <!--验证用户信息-->
-    <select id="authenticTeacher" parameterType="java.lang.String" resultMap="student">
+    <select id="authenticTeacher" parameterType="java.lang.String" resultMap="teacher">
         SELECT
         <include refid="teacherColumn"/> FROM teacher WHERE teacherName=#{teacherName}
         UNION

@@ -146,26 +146,26 @@
 
         var data={"usernameOrEmail":$("#loginUsername").val(),"password":$("#loginPassword").val()};
         $.ajax({
-            method:'GET',
-            url:'http://127.0.0.1:8080/OIS/login/',
+            method:'POST',
+            url:'http://127.0.0.1:8080/OIS/login',
             data:data,
             type:'application/json;charset=UTF-8',
             success:function(data){
                 //var data = data.parseJSON();
-                console.log("data",data.toString());
-                console("success login",data);
-                if(data.resultCode=="9999"){
-                    $("#login").modal("hide");
-                    isLogin();
-                    $("#theUserName").text(data.data.studentName);
-                }else{
-                    loginTip=data.resultMessage;
-                    $("#loginTip").prop(loginTip);
-                    $("#loginTip").prop("hidden",false);
-                    setTimeout(function(){
-                        $("#loginTip").prop("hidden",true);
-                    },1000*10);
-                }
+                //console.log("data",data.toString());
+                console.log(data);
+//                if(data.resultCode=="8888"){
+//                    $("#login").modal("hide");
+//                    isLogin();
+//                    $("#theUserName").text(data.data.studentName);
+//                }else{
+//                    loginTip=data.resultMessage;
+//                    $("#loginTip").prop(loginTip);
+//                    $("#loginTip").prop("hidden",false);
+//                    setTimeout(function(){
+//                        $("#loginTip").prop("hidden",true);
+//                    },1000*10);
+//                }
             },
             error:function(data){
                 loginTip=data.resultMessage;

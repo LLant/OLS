@@ -5,7 +5,7 @@
 <!-- namespace必须指向Dao接口 -->
 <mapper namespace="org.gdpu.ols.mapper.AdminMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
-    <resultMap id="student" type="org.gdpu.ols.model.Admin">
+    <resultMap id="admin" type="org.gdpu.ols.model.Admin">
         <id column="id" property="adminId"></id>
         <result column="adminName" property="adminName"/>
         <result column="password" property="adminPassword"/>

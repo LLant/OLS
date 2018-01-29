@@ -5,7 +5,7 @@
 <!-- namespace必须指向Dao接口 -->
 <mapper namespace="org.gdpu.ols.mapper.FileMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
-    <resultMap id="student" type="org.gdpu.ols.model.File">
+    <resultMap id="file" type="org.gdpu.ols.model.File">
         <id column="id" property="fileId"></id>
         <result column="fileName" property="fileName"/>
         <result column="storageLocation" property="storageLocation"/>

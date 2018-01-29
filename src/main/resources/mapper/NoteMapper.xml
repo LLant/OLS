@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.gdpu.ols.mapper.NoteMapper">
+    <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
+    <resultMap id="note" type="org.gdpu.ols.model.Note">
+        <id column="id" property="noteId"></id>
+        <result column="user" property="user"/>
+        <result column="noteTitle" property="noteTitle"/>
+        <result column="noteContent" property="noteContent"/>
+        <result column="noteDate" property="noteDate"/>
+        <result column="star" property="star"/>
+    </resultMap>
+
+</mapper>

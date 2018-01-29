@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.gdpu.ols.mapper.BlogMapper">
+    <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
+    <resultMap id="blog" type="org.gdpu.ols.model.Blog">
+        <result column="id" property="blogId"/>
+        <result column="user" property="user"/>
+        <result column="blogTitle" property="blogTitle"/>
+        <result column="blogContent" property="blogContent"/>
+        <result column="blogDate" property="blogDate"/>
+    </resultMap>
+</mapper>

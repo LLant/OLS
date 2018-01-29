@@ -59,7 +59,7 @@ public class HomeController extends BaseController {
     public String courseDetail(@PathVariable int id){
         return "video";
     }
-    @GetMapping("/login")
+    @PostMapping("/login")
     @ResponseBody
     public ResponseBean login(@RequestParam(defaultValue = "") String usernameOrEmail,
                          @RequestParam(defaultValue = "") String password,
@@ -104,7 +104,7 @@ public class HomeController extends BaseController {
                 }
             }
         }
-        //System.out.println(responseBean.toString());
+        System.out.println(responseBean.toString());
         return responseBean;
     }
 }

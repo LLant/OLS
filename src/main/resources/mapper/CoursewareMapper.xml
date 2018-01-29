@@ -5,13 +5,16 @@
 <!-- namespace必须指向Dao接口 -->
 <mapper namespace="org.gdpu.ols.mapper.CoursewareMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
-    <resultMap id="student" type="org.gdpu.ols.model.Courseware">
+    <resultMap id="courseware" type="org.gdpu.ols.model.Courseware">
         <id column="id" property="coursewareId"></id>
         <result column="coursewareName" property="coursewareName"/>
         <result column="author" property="author"/>
         <result column="examiner" property="examiner"/>
         <result column="coursewarePublishDate" property="coursewarePublishDate"/>
         <result column="coursewareStatus" property="coursewareStatus"/>
+        <result column="coursewareIntroduction" property="coursewareIntroduction"/>
+        <result column="coursewareTip" property="coursewareTip"/>
+        <result column="coursewareContent" property="coursewareContent"/>
     </resultMap>
 
 </mapper>

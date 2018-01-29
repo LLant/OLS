@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.gdpu.ols.mapper.CommentMapper">
+    <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
+    <resultMap id="comment" type="org.gdpu.ols.model.Comment">
+        <id column="id" property="commentId"></id>
+        <result column="commentContent" property="commentContent"/>
+        <result column="commentDate" property="commentDate"/>
+        <result column="isReply" property="isReply"/>
+        <result column="replyGoal" property="replyGoal"/>
+        <result column="commentauthor" property="commentauthor"/>
+        <result column="star" property="star"/>
+    </resultMap>
+
+</mapper>
