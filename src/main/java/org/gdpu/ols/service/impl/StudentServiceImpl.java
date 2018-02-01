@@ -65,6 +65,18 @@ public class StudentServiceImpl implements StudentService{
         }
     }
 
+    @Override
+    public Boolean hasNameOrEmail(String studentName, String studentEmail) {
+        Student student=null;
+        student=this.studentMapper.selectStudentByName(studentName);
+        if(student!=null)
+            return true;
+        student=this.studentMapper.selectStudentByEmail(studentEmail);
+        if (student!=null)
+            return true;
+        return false;
+    }
+
     private int addAndUpdateProcess(List<Student> studentList,String method){
         if (studentList!=null && !studentList.isEmpty()){
             Student student=null;

@@ -1,4 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Access-Control-Allow-Origin" content="*" />
 <div class="header podcast-header">
     <div class="container header-container">
         <div class="row podcast-header-top">
@@ -58,11 +59,11 @@
     );
     function isLogin() {
         $.ajax({
-            url:'http://127.0.0.1:8080/OIS/isLogin',
+            url:'http://localhost:8080/OIS/isLogin',
             method:'POST',
-            success:function (data) {
-                console.log("isLogin",data);
-                if(data=="true"){
+            success:function (isLogin) {
+                console.log("isLogin",isLogin);
+                if(isLogin){
                     $("#button1").css('display','none');
                     $("#button2").css('display','none');
                     $("#button3").css('display','block');
@@ -144,32 +145,30 @@
             $("#loginTip").prop("hidden",true);
         }
 
-        var data={"usernameOrEmail":$("#loginUsername").val(),"password":$("#loginPassword").val()};
+        var data={username:$("#loginUsername").val(),password:$("#loginPassword").val(),role:1};
         $.ajax({
-            method:'POST',
-            url:'http://127.0.0.1:8080/OIS/login',
-            data:data,
-            type:'application/json;charset=UTF-8',
+            type:'POST',
+            url:'http://localhost:8080/OIS/login',
+            data:JSON.stringify(data),
+            contentType:'application/json;charset=UTF-8',
             success:function(data){
-                //var data = data.parseJSON();
-                //console.log("data",data.toString());
                 console.log(data);
-//                if(data.resultCode=="8888"){
-//                    $("#login").modal("hide");
-//                    isLogin();
-//                    $("#theUserName").text(data.data.studentName);
-//                }else{
-//                    loginTip=data.resultMessage;
-//                    $("#loginTip").prop(loginTip);
-//                    $("#loginTip").prop("hidden",false);
-//                    setTimeout(function(){
-//                        $("#loginTip").prop("hidden",true);
-//                    },1000*10);
-//                }
+                if(data.resultCode=="8888"){
+                    $("#login").modal("hide");
+                    isLogin();
+                    $("#theUserName").text(data.data.studentName);
+                }else{
+                    loginTip=data.resultMessage;
+                    $("#loginTip").html(loginTip);
+                    $("#loginTip").prop("hidden",false);
+                    setTimeout(function(){
+                        $("#loginTip").prop("hidden",true);
+                    },1000*10);
+                }
             },
             error:function(data){
                 loginTip=data.resultMessage;
-                $("#loginTip").prop(loginTip);
+                $("#loginTip").html(loginTip);
                 $("#loginTip").prop("hidden",false);
                 setTimeout(function(){
                     $("#loginTip").prop("hidden",true);
@@ -255,13 +254,13 @@
     function GenerateCode(obj){
         code=GetCode();
         console.log("code:",code);
-        var setVerifyCodeUrl="";
+//        var sendCode={code:code};
         $.ajax({
             async:false,
-            method:'POST',
-            url:setVerifyCodeUrl,
-            data:{"code":code},
-            type:'JSON',
+            type:'POST',
+            url:"http://localhost:8080/OIS/sendCode?code='"+code+"'",
+//            data:JSON.stringify(sendCode),
+            conentType:'application/json',
             success:function(data){
 
             },
@@ -339,17 +338,34 @@
         }
 
         var registerUrl;
-        var data={"username":$("#registerUsername").val(),"password":$("#registerPassword").val(),"email":$("#email").val()};
+        var data={username:$("#registerUsername").val(),password:$("#registerPassword").val(),email:$("#email").val()};
         $.ajax({
-            method:'POST',
-            url:registerUrl,
-            data:data,
-            type:'JSON',
+            type:'POST',
+            url:"http://localhost:8080/OIS/register",
+            data:JSON.stringify(data),
+            contentType:'application/json',
             success:function(data){
-
+                console.log(data);
+                if(data.resultCode=="8888"){
+                    $("#register").modal("hide");
+                    isLogin();
+                    $("#theUserName").text(data.data.studentName);
+                }else{
+                    registerUrl=data.resultMessage;
+                    $("#registerUrl").html(registerUrl);
+                    $("#registerUrl").prop("hidden",false);
+                    setTimeout(function(){
+                        $("#registerUrl").prop("hidden",true);
+                    },1000*10);
+                }
             },
             error:function(data){
-
+                registerUrl=data.resultMessage;
+                $("#registerUrl").html(registerUrl);
+                $("#registerUrl").prop("hidden",false);
+                setTimeout(function(){
+                    $("#registerUrl").prop("hidden",true);
+                },1000*10);
             }
         });
     }

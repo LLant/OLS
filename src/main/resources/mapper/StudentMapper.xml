@@ -52,4 +52,12 @@
         UNION
         SELECT id,studentName,sex,email,password FROM student WHERE email=#{studentEmail}
     </select>
+
+    <!--验证用户信息-->
+    <select id="selectStudentByName" parameterType="java.lang.String" resultMap="student">
+        SELECT id,studentName,sex,email,password FROM student WHERE studentName=#{studentName}
+    </select>
+    <select id="selectStudentByEmail" parameterType="java.lang.String" resultMap="student">
+        SELECT id,studentName,sex,email,password FROM student WHERE email=#{studentEmail}
+    </select>
 </mapper>

@@ -11,4 +11,5 @@ public interface StudentService {
     int updateStudentBatch(List<Student> studentList,Boolean isTest);
     Student authenticStudent(String studentNameOrEmail,String studentPassword);
     Student getStudentByName(String studentName);
+    Boolean hasNameOrEmail(String studentName,String studentEmail);
 }
