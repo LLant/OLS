@@ -9,7 +9,9 @@ import org.gdpu.ols.service.StudentService;
 import org.gdpu.ols.service.TeacherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -39,19 +41,30 @@ public class HomeController extends BaseController {
         return "home";
     }
 
+    @GetMapping("/loginOut")
+    @ResponseBody
+    public String loginOut(HttpSession session){            //必须有返回类型，否则themeleaf会报错
+        if(session.getAttribute(session.getId())!=null)
+            session.removeAttribute(session.getId());
+        //session.getAttribute(session.getId())         session中不存在此属性会报错
+        return SUCCESS_CODE;
+    }
     @ResponseBody
     @PostMapping("/isLogin")
-    public Boolean isLogin(HttpSession session){
-        if(session.getAttribute("user")!=null){
-            return true;
+    public String isLogin(HttpSession session){
+        String isLogin=null;
+        if(session.getAttribute(session.getId())!=null){
+            return ((Student)session.getAttribute(session.getId())).getStudentName();
         }else{
-            return false;
+            return null;
         }
     }
 
     @PostMapping("/sendCode")
-    public void sendCode(@RequestParam(defaultValue = "") String code){
+    @ResponseBody
+    public String sendCode(@RequestParam(defaultValue = "") String code){
         logger.info(code);
+        return SUCCESS_CODE;
     }
 
     @GetMapping("/course")
@@ -63,7 +76,10 @@ public class HomeController extends BaseController {
         return "video";
     }
 
+
+
     @PostMapping("/register")
+    @Transactional
     public @ResponseBody ResponseBean register(@RequestBody UserBean userBean,HttpSession session){
         responseBean=new ResponseBean();
         if("".equals(userBean.getUsername()) || "".equals(userBean.getPassword()) ||
@@ -83,15 +99,21 @@ public class HomeController extends BaseController {
                 List<Student> lists=new ArrayList<Student>();
                 lists.add(student);
                 int i=this.studentService.addStudentBatch(lists);
-                logger.info("i=",i);
+                logger.info("i="+i);
                 if(i==1){
-                    student.setStudentId(
-                            this.studentService.authenticStudent(student.getStudentName(),
-                                    student.getStudentPassword()).getStudentId());
-                    responseBean.setResultCode(SUCCESS_CODE);
-                    responseBean.setResultMessage("用户注册成功");
-                    responseBean.setData(student);
-                    session.setAttribute("user",student);
+                    logger.info("ssss"+userBean.getUsername()+userBean.getPassword());
+                    Student user=null;
+                    user=this.studentService.authenticStudent(userBean.getUsername(),userBean.getPassword());
+                    if(user!=null){
+                        responseBean.setResultCode(SUCCESS_CODE);
+                        responseBean.setResultMessage("学生用户登录成功");
+                        responseBean.setData(user);
+                        session.setAttribute(session.getId(),user);
+                        session.setMaxInactiveInterval(60*30);
+                    }else{
+                        responseBean.setResultCode(ERROR_CODE);
+                        responseBean.setResultMessage("学生用户登录失败");
+                    }
                 }else {
                     responseBean.setResultCode(ERROR_CODE);
                     responseBean.setResultMessage("注册失败");
@@ -120,7 +142,8 @@ public class HomeController extends BaseController {
                         responseBean.setResultCode(SUCCESS_CODE);
                         responseBean.setResultMessage("学生用户登录成功");
                         responseBean.setData(student);
-                        session.setAttribute("user",student);
+                        session.setAttribute(session.getId(),student);
+                        session.setMaxInactiveInterval(60*30);
                     }else {
                         responseBean.setResultCode(ERROR_CODE);
                         responseBean.setResultMessage("学生用户登录失败");

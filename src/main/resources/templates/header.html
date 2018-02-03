@@ -45,7 +45,7 @@
                         aria-expanded="false" id="theUserName"></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">个人中心</a></li>
-                            <li><a href="#">登出</a></li>
+                            <li><a href="#" id="loginOut">登出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -57,17 +57,30 @@
     $(document).ready(
         isLogin()
     );
+    $('#loginOut').on('click',function () {
+        console.log("1111111111111111111111111111");
+        $.ajax({
+            url: 'http://localhost:8080/OIS/loginOut',
+            method: 'GET',
+            async: false
+        });
+        isLogin();
+    });
     function isLogin() {
         $.ajax({
             url:'http://localhost:8080/OIS/isLogin',
             method:'POST',
-            success:function (isLogin) {
-                console.log("isLogin",isLogin);
-                if(isLogin){
+//            data:JSON.stringify({userName:name}),
+//            contentType:'application/json',
+            success:function (theUserName) {
+                console.log("theUserName",theUserName);
+                if(theUserName){
                     $("#button1").css('display','none');
                     $("#button2").css('display','none');
+                    $("#theUserName").text(theUserName);
                     $("#button3").css('display','block');
                 }else {
+                    $("#theUserName").text("");
                     $("#button3").css('display','none');
                     $("#button1").css('display','block');
                     $("#button2").css('display','block');
@@ -156,7 +169,6 @@
                 if(data.resultCode=="8888"){
                     $("#login").modal("hide");
                     isLogin();
-                    $("#theUserName").text(data.data.studentName);
                 }else{
                     loginTip=data.resultMessage;
                     $("#loginTip").html(loginTip);
@@ -254,13 +266,10 @@
     function GenerateCode(obj){
         code=GetCode();
         console.log("code:",code);
-//        var sendCode={code:code};
         $.ajax({
             async:false,
             type:'POST',
-            url:"http://localhost:8080/OIS/sendCode?code='"+code+"'",
-//            data:JSON.stringify(sendCode),
-            conentType:'application/json',
+            url:'http://localhost:8080/OIS/sendCode?code='+code,
             success:function(data){
 
             },
@@ -349,22 +358,21 @@
                 if(data.resultCode=="8888"){
                     $("#register").modal("hide");
                     isLogin();
-                    $("#theUserName").text(data.data.studentName);
                 }else{
-                    registerUrl=data.resultMessage;
-                    $("#registerUrl").html(registerUrl);
-                    $("#registerUrl").prop("hidden",false);
+                    registerTip=data.resultMessage;
+                    $("#registerTip").html(registerTip);
+                    $("#registerTip").prop("hidden",false);
                     setTimeout(function(){
-                        $("#registerUrl").prop("hidden",true);
+                        $("#registerTip").prop("hidden",true);
                     },1000*10);
                 }
             },
             error:function(data){
-                registerUrl=data.resultMessage;
-                $("#registerUrl").html(registerUrl);
-                $("#registerUrl").prop("hidden",false);
+                registerTip=data.resultMessage;
+                $("#registerTip").html(registerTip);
+                $("#registerTip").prop("hidden",false);
                 setTimeout(function(){
-                    $("#registerUrl").prop("hidden",true);
+                    $("#registerTip").prop("hidden",true);
                 },1000*10);
             }
         });
