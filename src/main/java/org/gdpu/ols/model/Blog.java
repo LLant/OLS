@@ -2,10 +2,12 @@ package org.gdpu.ols.model;
 
 import org.gdpu.ols.common.BaseBean;
 
+import javax.persistence.Id;
 import java.util.Date;
 
 public class Blog extends BaseBean{
 
+    @Id
     private Integer blogId;
     private Integer user;
     private String blogTitle;

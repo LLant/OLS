@@ -2,8 +2,11 @@ package org.gdpu.ols.model;
 
 import org.gdpu.ols.common.BaseBean;
 
+import javax.persistence.Id;
+
 public class RoleRelationship extends BaseBean {
 
+    @Id
     private Integer student;
     private Integer teacher;
 

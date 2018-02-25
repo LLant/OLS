@@ -1,8 +1,7 @@
 package org.gdpu.ols.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.gdpu.ols.model.Note;
 
-@Mapper
-public interface NoteMapper {
+public interface NoteMapper extends org.gdpu.ols.core.Mapper<Note> {
 
 }

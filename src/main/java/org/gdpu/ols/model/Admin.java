@@ -3,11 +3,13 @@ package org.gdpu.ols.model;
 import org.apache.ibatis.type.Alias;
 import org.gdpu.ols.common.BaseBean;
 
+import javax.persistence.Id;
 import java.util.Date;
 
 @Alias("admin")
 public class Admin extends BaseBean{
 
+    @Id
     private Integer adminId;
     private String adminName;
     private transient String adminPassword;

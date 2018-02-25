@@ -15,4 +15,18 @@
         <result column="fileTheme" property="fileTheme"/>
     </resultMap>
 
+    <!--批添加学生信息-->
+    <insert id="addFileBatch" useGeneratedKeys="true" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Integer" order="AFTER">
+            SELECT
+            LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO file(fileName,storageLocation,publishDate,fileType,author,
+        fileTheme,courseware,previousFile,nextFile)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.fileName},#{item.storageLocation},#{item.publishDate},#{item.fileType}
+            ,#{item.author},#{item.fileTheme},#{item.mainFile},#{item.previousFile},#{item.nextFile})
+        </foreach>
+    </insert>
 </mapper>

@@ -1,8 +1,7 @@
 package org.gdpu.ols.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.gdpu.ols.model.RoleRelationship;
 
-@Mapper
-public interface RoleRelationshipMapper {
+public interface RoleRelationshipMapper extends org.gdpu.ols.core.Mapper<RoleRelationship> {
 
 }

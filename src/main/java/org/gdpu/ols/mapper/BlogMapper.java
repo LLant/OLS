@@ -1,8 +1,7 @@
 package org.gdpu.ols.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.gdpu.ols.model.Blog;
 
-@Mapper
-public interface BlogMapper {
+public interface BlogMapper extends org.gdpu.ols.core.Mapper<Blog>{
 
 }

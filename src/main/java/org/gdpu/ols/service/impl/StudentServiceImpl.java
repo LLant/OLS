@@ -1,5 +1,6 @@
 package org.gdpu.ols.service.impl;
 
+import org.gdpu.ols.core.AbstractService;
 import org.gdpu.ols.mapper.StudentMapper;
 import org.gdpu.ols.model.Student;
 import org.gdpu.ols.service.StudentService;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class StudentServiceImpl implements StudentService{
+public class StudentServiceImpl extends AbstractService<Student> implements StudentService{
 
     @Resource
     private StudentMapper studentMapper;

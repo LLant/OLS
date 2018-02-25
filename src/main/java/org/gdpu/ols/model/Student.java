@@ -3,10 +3,13 @@ package org.gdpu.ols.model;
 import org.apache.ibatis.type.Alias;
 import org.gdpu.ols.common.BaseBean;
 
+import javax.persistence.Id;
+
 
 @Alias("student")                   //使用alias标签来指定名称
 public class Student extends BaseBean {
 
+    @Id
     private Integer studentId;
     private String studentName;
     private transient String studentPassword;

@@ -1,10 +1,11 @@
 package org.gdpu.ols.service;
 
+import org.gdpu.ols.core.Service;
 import org.gdpu.ols.model.Student;
 
 import java.util.List;
 
-public interface StudentService {
+public interface StudentService extends Service<Student> {
 
     int getStudentCount();
     int addStudentBatch(List<Student> studentList);

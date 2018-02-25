@@ -3,10 +3,13 @@ package org.gdpu.ols.model;
 import org.apache.ibatis.type.Alias;
 import org.gdpu.ols.common.BaseBean;
 
+import javax.persistence.Id;
+
 
 @Alias("teacher")
 public class Teacher extends BaseBean{
 
+    @Id
     private Integer teacherId;
     private String teacherName;
     private String realName;

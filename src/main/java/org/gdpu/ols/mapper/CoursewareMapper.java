@@ -1,8 +1,7 @@
 package org.gdpu.ols.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.gdpu.ols.model.Courseware;
 
-@Mapper
-public interface CoursewareMapper {
+public interface CoursewareMapper extends org.gdpu.ols.core.Mapper<Courseware> {
 
 }

@@ -1,13 +1,11 @@
 package org.gdpu.ols.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.gdpu.ols.model.Admin;
 
 import java.util.List;
 
-@Mapper
-public interface AdminMapper {
+public interface AdminMapper extends org.gdpu.ols.core.Mapper<Admin>{
 
-    Admin selectOne(Integer id);
+    Admin selectOneAdmin(Integer id);
     int addAdminBatch(List<Admin> admins);
 }

@@ -2,10 +2,12 @@ package org.gdpu.ols.model;
 
 import org.gdpu.ols.common.BaseBean;
 
+import javax.persistence.Id;
 import java.util.Date;
 
 public class Note extends BaseBean{
 
+    @Id
     private Integer noteId;
     private Integer coursewareId;
     private Integer user;

@@ -2,10 +2,12 @@ package org.gdpu.ols.model;
 
 import org.gdpu.ols.common.BaseBean;
 
+import javax.persistence.Id;
 import java.util.Date;
 
 public class File extends BaseBean{
 
+    @Id
     private Integer fileId;
     private String fileName;
     private String storageLocation;         //存储位置

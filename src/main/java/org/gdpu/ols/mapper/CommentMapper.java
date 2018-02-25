@@ -1,8 +1,7 @@
 package org.gdpu.ols.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.gdpu.ols.model.Comment;
 
-@Mapper
-public interface CommentMapper {
+public interface CommentMapper extends org.gdpu.ols.core.Mapper<Comment>{
 
 }

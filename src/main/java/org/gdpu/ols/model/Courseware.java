@@ -2,10 +2,12 @@ package org.gdpu.ols.model;
 
 import org.gdpu.ols.common.BaseBean;
 
+import javax.persistence.Id;
 import java.util.Date;
 
 public class Courseware extends BaseBean {
 
+    @Id
     private Integer coursewareId;
     private Integer author;
     private Integer examiner;       //课件审查人

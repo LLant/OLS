@@ -9,7 +9,6 @@ import org.gdpu.ols.service.StudentService;
 import org.gdpu.ols.service.TeacherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
