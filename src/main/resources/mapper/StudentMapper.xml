@@ -6,11 +6,12 @@
 <mapper namespace="org.gdpu.ols.mapper.StudentMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="student" type="org.gdpu.ols.model.Student">
-        <id column="id" property="studentId"></id>
-        <result column="studentName" property="studentName"/>
-        <result column="password" property="studentPassword"/>
-        <result column="email" property="studentEmail"/>
-        <result column="sex" property="studentSex"/>
+        <id column="id" property="id"></id>
+        <result column="student_name" property="studentName"/>
+        <result column="student_password" property="studentPassword"/>
+        <result column="student_email" property="studentEmail"/>
+        <result column="student_sex" property="studentSex"/>
+        <result column="photo_storage_location" property="photoStorageLocation"/>
     </resultMap>
 
     <!--获取所有的学生-->
@@ -20,9 +21,9 @@
 
     <!--根据studentName获取学生信息-->
     <select id="getStudentByName" resultMap="student" parameterType="java.lang.String">
-        SELECT id,studentName,sex,email,password
+        SELECT id,student_name,student_sex,student_email,student_password
         FROM student
-        WHERE studentName=#{item.studentName}
+        WHERE student_name=#{item.studentName}
     </select>
 
     <!--批添加学生信息-->
@@ -31,7 +32,7 @@
             SELECT
             LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO student(studentName,sex,email,password)
+        INSERT INTO student(student_name,student_sex,student_email,student_password)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.studentName},#{item.studentSex},#{item.studentEmail},#{item.studentPassword})
@@ -41,23 +42,23 @@
     <update id="updateStudentBatch" parameterType="java.util.List">
         UPDATE student
         <foreach collection="list" item="item" index="index" separator=",">
-            SET studentName=#{item.studentName},sex=#{item.studentSex},
-            email=#{item.studentEmail},password=#{item.studentPassword}
-            WHERE id=#{item.studentId}
+            SET student_name=#{item.studentName},student_sex=#{item.studentSex},
+            student_email=#{item.studentEmail},student_password=#{item.studentPassword}
+            WHERE id=#{item.id}
         </foreach>
     </update>
     <!--验证用户信息-->
     <select id="authenticStudent" parameterType="java.lang.String" resultMap="student">
-        SELECT id,studentName,sex,email,password FROM student WHERE studentName=#{studentName}
+        SELECT id,student_name,student_sex,student_email,student_password,photo_storage_location FROM student WHERE student_name=#{studentName}
         UNION
-        SELECT id,studentName,sex,email,password FROM student WHERE email=#{studentEmail}
+        SELECT id,student_name,student_sex,student_email,student_password,photo_storage_location FROM student WHERE student_email=#{studentEmail}
     </select>
 
     <!--验证用户信息-->
     <select id="selectStudentByName" parameterType="java.lang.String" resultMap="student">
-        SELECT id,studentName,sex,email,password FROM student WHERE studentName=#{studentName}
+        SELECT id,student_name,student_sex,student_email,student_password FROM student WHERE student_name=#{studentName}
     </select>
     <select id="selectStudentByEmail" parameterType="java.lang.String" resultMap="student">
-        SELECT id,studentName,sex,email,password FROM student WHERE email=#{studentEmail}
+        SELECT id,student_name,student_sex,student_email,student_password FROM student WHERE student_email=#{studentEmail}
     </select>
 </mapper>

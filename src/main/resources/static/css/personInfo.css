@@ -1,0 +1,140 @@
+.bg-other{
+    background: url(../images/personInfoBackground.png)center top no-repeat #000;
+    background-size: cover;
+    height: 148px;
+}
+.user-info{
+    position: relative;
+    width: 1152px;
+    margin: 0 auto;
+    padding-bottom: 48px;
+}
+.user-pic{
+    float: left;
+    width: 148px;
+    height: 148px;
+}
+.user-pic-bg{
+    border: 4px solid #fff;
+    box-shadow: 0 4px 8px 0 rgba(7,17,27,.1);
+    width: 140px;
+    height: 140px;
+    position: relative;
+    border-radius: 50%;
+    background-color: #fff;
+    top: 24px;
+}
+.user-pic .user-pic-bg img{
+    text-align: center;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+}
+.user-info-right{
+    float: right;
+    width: 980px;
+    height: 196px;
+}
+.user-name {
+    font-weight: 600;
+    text-align: left;
+    font-size: 24px;
+    color: #F1F1F1;
+    line-height: 28px;
+    margin-top: 48px;
+    margin-bottom: 300px;
+}
+.user-info .user-name span {
+    float: left;
+}
+#user_email{
+    margin-top: 15px;
+    display: inline-block;
+    font-size: 16px;
+    color: #FFF;
+    line-height: 20px;
+}
+.study-info{
+    position: absolute;
+    top: 48px;
+    right: 10px;
+    min-width: 200px;
+    text-align: right;
+}
+.study-info .item{
+    line-height: 48px;
+    vertical-align: middle;
+    height: 48px;
+    float: left;
+}
+.study-info .follow{
+    margin-right: 24px;
+}
+.study-info .item em {
+    display: block;
+    text-align: center;
+    font-weight: 700;
+    font-size: 24px;
+    color: rgba(255,255,255,.8);
+    line-height: 28px;
+    font-style: normal;
+    cursor: pointer;
+}
+.study-info .item span {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(255,255,255,.8);
+    line-height: 20px;
+    margin-top: 4px;
+}
+.study-info .set-btn {
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 18px;
+    font-size: 14px;
+    color: rgba(255,255,255,.8);
+    line-height: 20px;
+    height: 20px;
+}
+.study-info .set-btn:hover{
+    text-decoration:none;
+    border:1px solid #fff;
+}
+.wrap {
+    /*padding-top: 0px!important;
+    margin-top: 0px!important;*/
+    /*width: 1200px;*/
+    /*margin: 0 auto;*/
+}
+.slider {
+    width: 172px;
+    left: 24px;
+    top: 0;
+}
+
+#left-content{
+    margin-top: 20px;
+}
+.list-group{
+    padding-left: 0;
+}
+#panel-group{
+    margin-top: 20px;
+}
+@media screen and (max-width: 500px) {
+    .row #left{
+        display: none;
+    }
+    .row #right{
+        width: 100%;
+        margin-top: 20px!important;
+        padding-top: 20px!important;
+    }
+}
+.row #right{
+    margin-top: 20px;
+}
+#left .text-center .list-group a{
+    border:0px;
+}

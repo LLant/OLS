@@ -8,7 +8,7 @@ import java.util.Date;
 public class Blog extends BaseBean{
 
     @Id
-    private Integer blogId;
+    private Integer id;
     private Integer user;
     private String blogTitle;
     private String blogContent;
@@ -16,12 +16,12 @@ public class Blog extends BaseBean{
 
     public Blog(){}
 
-    public Integer getBlogId() {
-        return blogId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setBlogId(Integer blogId) {
-        this.blogId = blogId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getUser() {

@@ -1,30 +1,24 @@
-package org.gdpu.ols.model;
+package org.gdpu.ols.bean;
 
-import org.apache.ibatis.type.Alias;
-import org.gdpu.ols.common.BaseBean;
+public class StudentCustom {
 
-import javax.persistence.Id;
-
-
-@Alias("student")                   //使用alias标签来指定名称
-public class Student extends BaseBean {
-
-    @Id
-    private Integer id;
+    private Integer studentId;
     private String studentName;
-    private transient String studentPassword;
+    private String studentPassword;
     private String studentEmail;
     private String studentSex;
-    private String photoStorageLocation;         //图片存储位置
+    private String photoStorageLocation;
+    private Integer learningTime;
+    private Integer starNumber;
 
-    public Student(){}
+    public StudentCustom(){}
 
-    public Integer getId() {
-        return id;
+    public Integer getStudentId() {
+        return studentId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
 
     public String getStudentName() {
@@ -59,23 +53,27 @@ public class Student extends BaseBean {
         this.studentSex = studentSex;
     }
 
+    public Integer getLearningTime() {
+        return learningTime;
+    }
+
+    public void setLearningTime(Integer learningTime) {
+        this.learningTime = learningTime;
+    }
+
+    public Integer getStarNumber() {
+        return starNumber;
+    }
+
+    public void setStarNumber(Integer starNumber) {
+        this.starNumber = starNumber;
+    }
+
     public String getPhotoStorageLocation() {
         return photoStorageLocation;
     }
 
     public void setPhotoStorageLocation(String photoStorageLocation) {
         this.photoStorageLocation = photoStorageLocation;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", studentName='" + studentName + '\'' +
-                ", studentPassword='" + studentPassword + '\'' +
-                ", studentEmail='" + studentEmail + '\'' +
-                ", studentSex='" + studentSex + '\'' +
-                ", photoStorageLocation='" + photoStorageLocation + '\'' +
-                '}';
     }
 }

@@ -8,7 +8,7 @@ import java.util.Date;
 public class Courseware extends BaseBean {
 
     @Id
-    private Integer coursewareId;
+    private Integer id;
     private Integer author;
     private Integer examiner;       //课件审查人
     private String coursewareName;
@@ -20,12 +20,12 @@ public class Courseware extends BaseBean {
 
     public Courseware(){}
 
-    public Integer getCoursewareId() {
-        return coursewareId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCoursewareId(Integer coursewareId) {
-        this.coursewareId = coursewareId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getAuthor() {

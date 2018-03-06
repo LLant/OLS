@@ -7,11 +7,19 @@ import javax.persistence.Id;
 public class RoleRelationship extends BaseBean {
 
     @Id
+    private Integer id;
     private Integer student;
     private Integer teacher;
 
     public RoleRelationship(){}
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getStudent() {
         return student;

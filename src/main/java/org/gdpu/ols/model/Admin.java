@@ -10,7 +10,7 @@ import java.util.Date;
 public class Admin extends BaseBean{
 
     @Id
-    private Integer adminId;
+    private Integer id;
     private String adminName;
     private transient String adminPassword;
     private Integer lastestUpdateUser;
@@ -19,12 +19,12 @@ public class Admin extends BaseBean{
 
     public Admin(){}
 
-    public Integer getAdminId() {
-        return adminId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setAdminId(Integer adminId) {
-        this.adminId = adminId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getAdminName() {

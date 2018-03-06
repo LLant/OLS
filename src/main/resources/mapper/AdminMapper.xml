@@ -6,23 +6,23 @@
 <mapper namespace="org.gdpu.ols.mapper.AdminMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="admin" type="org.gdpu.ols.model.Admin">
-        <id column="id" property="adminId"></id>
-        <result column="adminName" property="adminName"/>
-        <result column="password" property="adminPassword"/>
-        <result column="lastestUpdateUser" property="lastestUpdateUser"/>
-        <result column="lastestLoginDate" property="lastestLoginDate"/>
-        <result column="lastestUpdateDate" property="lastestUpdateDate"/>
+        <id column="id" property="id"></id>
+        <result column="admin_name" property="adminName"/>
+        <result column="admin_password" property="adminPassword"/>
+        <result column="lastest_update_user" property="lastestUpdateUser"/>
+        <result column="lastest_login_date" property="lastestLoginDate"/>
+        <result column="lastest_update_date" property="lastestUpdateDate"/>
     </resultMap>
 
     <sql id="column">
-        id,adminName,password,lastestUpdateUser,lastestLoginDate,lastestUpdateDate
+        id,admin_name,admin_password,lastest_update_user,lastest_login_date,lastest_update_date
     </sql>
 
     <select id="selectOneAdmin" parameterType="java.lang.Integer" resultType="org.gdpu.ols.model.Admin">
         SELECT
         <include refid="column"/>
         FROM administrators
-        WHERE  id=#{adminId}
+        WHERE  id=#{id}
     </select>
 
     <!--批添加学生信息-->
@@ -31,7 +31,7 @@
             SELECT
             LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO admin(adminName,password,lastestUpdateUser,lastestLoginDate,lastestUpdateDate)
+        INSERT INTO admin(admin_name,admin_password,lastest_update_user,lastest_login_date,lastest_update_date)
         VALUES
         <foreach collection="list" index="index" item="item" separator=",">
             (#{item.adminName},#{item.adminPassword},#{item.lastestUpdateUser},

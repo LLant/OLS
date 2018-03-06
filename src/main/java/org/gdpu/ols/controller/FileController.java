@@ -31,7 +31,7 @@ public class FileController {
     public String saveFile(@RequestBody File file, HttpServletRequest request, HttpSession session) {
         String teacherId = "";
         if (session.getAttribute(session.getId()) != null) {
-            teacherId = ((Student) session.getAttribute(session.getId())).getStudentId().toString();
+            teacherId = ((Student) session.getAttribute(session.getId())).getId().toString();
         }
         try {
             String storageLocation=this.saveFile(teacherId,request);

@@ -6,12 +6,13 @@
 <mapper namespace="org.gdpu.ols.mapper.CommentMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="comment" type="org.gdpu.ols.model.Comment">
-        <id column="id" property="commentId"></id>
-        <result column="commentContent" property="commentContent"/>
-        <result column="commentDate" property="commentDate"/>
-        <result column="isReply" property="isReply"/>
-        <result column="replyGoal" property="replyGoal"/>
-        <result column="commentauthor" property="commentauthor"/>
+        <id column="id" property="id"></id>
+        <result column="courseware_id" property="coursewareId"></result>
+        <result column="comment_content" property="commentContent"/>
+        <result column="comment_date" property="commentDate"/>
+        <result column="is_reply" property="isReply"/>
+        <result column="reply_goal" property="replyGoal"/>
+        <result column="comment_author" property="commentauthor"/>
         <result column="star" property="star"/>
     </resultMap>
 

@@ -27,8 +27,8 @@
 
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/OIS/">首页</a></li>
-                    <li><a href="/OIS/course">课程</a></li>
+                    <li class="active"><a href="/OLS/">首页</a></li>
+                    <li><a href="/OLS/course">课程</a></li>
                     <li><a href="#">手记</a></li>
                 </ul>
                 <form class="navbar-form navbar-left">
@@ -44,7 +44,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                         aria-expanded="false" id="theUserName"></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">个人中心</a></li>
+                            <li><a href="/OLS/info/baseMessage">个人中心</a></li>
                             <li><a href="#" id="loginOut">登出</a></li>
                         </ul>
                     </li>
@@ -58,9 +58,8 @@
         isLogin()
     );
     $('#loginOut').on('click',function () {
-        console.log("1111111111111111111111111111");
         $.ajax({
-            url: 'http://localhost:8080/OIS/loginOut',
+            url: 'http://localhost:8080/OLS/loginOut',
             method: 'GET',
             async: false
         });
@@ -68,7 +67,7 @@
     });
     function isLogin() {
         $.ajax({
-            url:'http://localhost:8080/OIS/isLogin',
+            url:'http://localhost:8080/OLS/isLogin',
             method:'POST',
 //            data:JSON.stringify({userName:name}),
 //            contentType:'application/json',
@@ -135,7 +134,6 @@
 <script type="text/javascript">
     function Login(){
         var loginTip="";
-        //console.log("1111111111111111111111");
         console.log($("#loginUsername").val());
         if($("#loginUsername").val()==''){
             loginTip="用户名或邮箱不能为空";
@@ -161,7 +159,7 @@
         var data={username:$("#loginUsername").val(),password:$("#loginPassword").val(),role:1};
         $.ajax({
             type:'POST',
-            url:'http://localhost:8080/OIS/login',
+            url:'http://localhost:8080/OLS/login',
             data:JSON.stringify(data),
             contentType:'application/json;charset=UTF-8',
             success:function(data){
@@ -269,7 +267,7 @@
         $.ajax({
             async:false,
             type:'POST',
-            url:'http://localhost:8080/OIS/sendCode?code='+code,
+            url:'http://localhost:8080/OLS/sendCode?code='+code,
             success:function(data){
 
             },
@@ -350,7 +348,7 @@
         var data={username:$("#registerUsername").val(),password:$("#registerPassword").val(),email:$("#email").val()};
         $.ajax({
             type:'POST',
-            url:"http://localhost:8080/OIS/register",
+            url:"http://localhost:8080/OLS/register",
             data:JSON.stringify(data),
             contentType:'application/json',
             success:function(data){

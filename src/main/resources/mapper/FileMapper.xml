@@ -6,13 +6,16 @@
 <mapper namespace="org.gdpu.ols.mapper.FileMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="file" type="org.gdpu.ols.model.File">
-        <id column="id" property="fileId"></id>
-        <result column="fileName" property="fileName"/>
-        <result column="storageLocation" property="storageLocation"/>
-        <result column="publishDate" property="publishDate"/>
-        <result column="fileType" property="fileType"/>
+        <id column="id" property="id"></id>
+        <result column="file_name" property="fileName"/>
+        <result column="storage_location" property="storageLocation"/>
+        <result column="publish_date" property="publishDate"/>
+        <result column="file_type" property="fileType"/>
         <result column="author" property="author"/>
-        <result column="fileTheme" property="fileTheme"/>
+        <result column="file_theme" property="fileTheme"/>
+        <result column="main_file" property="mainFile"/>
+        <result column="previous_file" property="previousFile"/>
+        <result column="next_file" property="nextFile"/>
     </resultMap>
 
     <!--批添加学生信息-->
@@ -21,8 +24,8 @@
             SELECT
             LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO file(fileName,storageLocation,publishDate,fileType,author,
-        fileTheme,courseware,previousFile,nextFile)
+        INSERT INTO file(file_name,storage_location,publish_date,file_type,author,
+        file_theme,courseware,previousFile,nextFile)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.fileName},#{item.storageLocation},#{item.publishDate},#{item.fileType}

@@ -6,6 +6,7 @@
 <mapper namespace="org.gdpu.ols.mapper.RoleRelationshipMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="roleRelationship" type="org.gdpu.ols.model.RoleRelationship">
+        <id column="id" property="id"></id>
         <result column="student" property="student"/>
         <result column="teacher" property="teacher"/>
     </resultMap>

@@ -20,7 +20,7 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping(value ="/OIS")
+@RequestMapping(value ="/OLS")
 public class HomeController extends BaseController {
 
     private static final Logger logger= LoggerFactory.getLogger(HomeController.class);

@@ -8,23 +8,23 @@ import java.util.Date;
 public class Comment extends BaseBean{
 
     @Id
-    private Integer commentId;
+    private Integer id;
     private Integer coursewareId;
     private String commentContent;
     private Date commentDate;
     private String isReply;
     private Integer replyGoal;
-    private Integer commentauthor;
+    private Integer commentAuthor;
     private Long star;              //点赞次数
 
     public Comment(){}
 
-    public Integer getCommentId() {
-        return commentId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCommentId(Integer commentId) {
-        this.commentId = commentId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getCoursewareId() {
@@ -67,12 +67,12 @@ public class Comment extends BaseBean{
         this.replyGoal = replyGoal;
     }
 
-    public Integer getCommentauthor() {
-        return commentauthor;
+    public Integer getCommentAuthor() {
+        return commentAuthor;
     }
 
-    public void setCommentauthor(Integer commentauthor) {
-        this.commentauthor = commentauthor;
+    public void setCommentAuthor(Integer commentAuthor) {
+        this.commentAuthor = commentAuthor;
     }
 
     public Long getStar() {

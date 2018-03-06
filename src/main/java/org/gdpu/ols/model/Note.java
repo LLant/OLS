@@ -8,7 +8,7 @@ import java.util.Date;
 public class Note extends BaseBean{
 
     @Id
-    private Integer noteId;
+    private Integer id;
     private Integer coursewareId;
     private Integer user;
     private String noteTitle;
@@ -18,12 +18,12 @@ public class Note extends BaseBean{
 
     public Note(){}
 
-    public Integer getNoteId() {
-        return noteId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setNoteId(Integer noteId) {
-        this.noteId = noteId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getCoursewareId() {

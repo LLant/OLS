@@ -6,10 +6,10 @@
 <mapper namespace="org.gdpu.ols.mapper.BlogMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="blog" type="org.gdpu.ols.model.Blog">
-        <result column="id" property="blogId"/>
+        <result column="id" property="id"/>
         <result column="user" property="user"/>
-        <result column="blogTitle" property="blogTitle"/>
-        <result column="blogContent" property="blogContent"/>
-        <result column="blogDate" property="blogDate"/>
+        <result column="blog_title" property="blogTitle"/>
+        <result column="blog_content" property="blogContent"/>
+        <result column="blog_date" property="blogDate"/>
     </resultMap>
 </mapper>

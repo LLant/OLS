@@ -6,25 +6,25 @@
 <mapper namespace="org.gdpu.ols.mapper.TeacherMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="teacher" type="org.gdpu.ols.model.Teacher">
-        <id column="id" property="teacherId"></id>
-        <result column="teacherName" property="teacherName"/>
-        <result column="realName" property="realName"/>
-        <result column="password" property="teacherPassword"/>
-        <result column="email" property="teacherEmail"/>
-        <result column="sex" property="teacherSex"/>
+        <id column="id" property="id"></id>
+        <result column="teacher_name" property="teacherName"/>
+        <result column="real_name" property="realName"/>
+        <result column="teacher_password" property="teacherPassword"/>
+        <result column="teacher_email" property="teacherEmail"/>
+        <result column="teacher_sex" property="teacherSex"/>
         <result column="degree" property="degree"/>
         <result column="university" property="university"/>
     </resultMap>
 
     <sql id="teacherColumn">
-        id,teacherName,realName,password,email,sex,degree,university
+        id,teacher_name,real_name,teacher_password,teacher_email,teacher_sex,degree,university
     </sql>
     <!--批量添加老师信息-->
     <insert id="addTeacherBatch" parameterType="java.util.List" useGeneratedKeys="true">
         <selectKey resultType="java.lang.Integer" order="AFTER">
             SELECT LAST_INSERT_id()
         </selectKey>
-        INSERT INTO teacher(teacherName,realName,password,email,sex,degree,university)
+        INSERT INTO teacher(teacher_name,real_name,teacher_password,teacher_email,teacher_sex,degree,university)
         VALUES
         <foreach collection="list" index="index" item="item" separator=",">
             (#{item.teacherName},#{item.realName},#{item.teacherPassword},#{item.teacherEmail},
@@ -35,9 +35,9 @@
     <!--验证用户信息-->
     <select id="authenticTeacher" parameterType="java.lang.String" resultMap="teacher">
         SELECT
-        <include refid="teacherColumn"/> FROM teacher WHERE teacherName=#{teacherName}
+        <include refid="teacherColumn"/> FROM teacher WHERE teacher_name=#{teacherName}
         UNION
         SELECT
-        <include refid="teacherColumn"/> FROM teacher WHERE email=#{teacherEmail}
+        <include refid="teacherColumn"/> FROM teacher WHERE teacher_email=#{teacherEmail}
     </select>
 </mapper>

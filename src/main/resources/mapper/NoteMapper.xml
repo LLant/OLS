@@ -6,11 +6,12 @@
 <mapper namespace="org.gdpu.ols.mapper.NoteMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="note" type="org.gdpu.ols.model.Note">
-        <id column="id" property="noteId"></id>
+        <id column="id" property="id"></id>
+        <result column="courseware_id" property="coursewareId"/>
         <result column="user" property="user"/>
-        <result column="noteTitle" property="noteTitle"/>
-        <result column="noteContent" property="noteContent"/>
-        <result column="noteDate" property="noteDate"/>
+        <result column="note_title" property="noteTitle"/>
+        <result column="note_content" property="noteContent"/>
+        <result column="note_date" property="noteDate"/>
         <result column="star" property="star"/>
     </resultMap>
 

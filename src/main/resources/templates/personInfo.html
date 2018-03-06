@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OLS</title>
+    <link type="text/css" href="/css/bootstrap.css" rel="stylesheet"/>
+    <link href="/css/personInfo.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+</head>
+<body>
+<div class="bg-other">
+    <div class="user-info">
+        <div class="user-pic">
+            <div class="user-pic-bg">
+                <img src="" alt="" id="user_image">
+            </div>
+        </div>
+        <div class="user-info-right">
+            <h3 class="user-name">
+                <span id="user_name">little小小</span>
+                <br><span id="user_email">ols@sina.com</span>
+            </h3>
+        </div>
+        <div class="study-info">
+            <div class="item follow">
+                <div>
+                    <em>235h</em>
+                    <span>学习时长</span>
+                </div>
+            </div>
+            <div class="item follow">
+                <div>
+                    <em>1</em>
+                    <span>关注</span>
+                </div>
+            </div>
+            <div class="item follow">
+                <div>
+                    <em>10</em>
+                    <span>学生</span>
+                </div>
+            </div>
+            <div class="item follow">
+                <a href="#" class="set-btn">
+                    申请讲师
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="wrap container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-xs-4" id="left">
+            <div class="text-center" id="left-content">
+                <div class="list-group">
+                    <ul style="list-style-type:none;">
+                        <li><a href="#" class="list-group-item active">修改信息</a> </li>
+                        <li><a href="#" class="list-group-item">我的笔记</a> </li>
+                        <li><a href="#" class="list-group-item">我的分享</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9 col-xs-8" id="right">
+                <div class="form-group form-inline">
+                    <label for="newPassword">新密码</label>
+                    <input type="text" class="form-control" id="newPassword" placeholder="********">
+                </div>
+                <div class="form-group form-inline">
+                    <label for="newEmail">&nbsp;Email</label>
+                    <input type="email" class="form-control" id="newEmail" placeholder="jane.doe@example.com">
+                </div>
+                <div class="form-group form-inline">
+                    <label for="new_image">上传头像</label>
+                    <input type="file" id="new_image" />
+                </div>
+                <button class="btn btn-primary" onclick="updateInfo();">提交</button>
+                <button class="btn btn-warning">取消</button>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $.ajax({
+                async:false,
+                type:'POST',
+                url:'http://localhost:8080/OLS/info/getInfo',
+                success:function (data) {
+                    $('#user_name').text(data.studentName);
+                    $('#user_email').text(data.studentEmail);
+                    $("#user_image").attr('src', data.photoStorageLocation);
+//                    console.log($("#user_image").attr('src'));
+                    $('#newEmail').attr('placeholder',data.studentEmail);
+                },
+                error:function (data) {
+                    $('newEmail').attr('placeholder','');
+                }
+            });
+        });
+        $('.list-group ul a').click(function(){
+            $('.list-group ul a').removeClass('active');
+            /*console.log($(this));*/
+            $(this).addClass('active');
+        });
+
+        function validate_image(){
+            var file=$("new_image").val();
+            if(file==null){
+                return "true";
+            }
+            if(!/.(gif|jpg|png)$/.test(file)){
+                return "图片类型必须是gifjpg,png中的一种";
+            }
+            var image=new image();
+            image.src=file;
+            var height=image.height;
+            var width=image.width;
+            var filesize=image.filesize;
+            if(width!=148&&height!=148){
+                return "请上传148*148像素的图片";
+            }
+            if(filesize>1024*200){
+                return "请上传小于200KB的图片";
+            }
+
+            return "true";
+        }
+
+        function updateInfo(){
+            console.log(validate_image());
+            if(validate_image()!="true"){
+                return;
+            }
+            var formData=new FormData($('#info')[0]);
+            formData.append("password",$('#newPassword').val());
+            formData.append("email",$('#newEmail').val());
+            formData.append("image",$('#new_image')[0]);
+
+            $.ajax({
+                type:'POST',
+                url:'http://localhost:8080/OLS/info/updateInfo',
+                dataType:'JSON',
+                data:formData,
+                processData: false,
+                contentType: false, // 注意这里应设为false
+                success:function(data){
+                    $('#user_email').text(data.studentEmail);
+                    $("#user_image").attr('src', data.photoStorageLocation);
+                    $('#newEmail').attr('placeholder',data.studentEmail);
+                    $('#newEmail').val('');
+                    $('#newPassword').val('');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

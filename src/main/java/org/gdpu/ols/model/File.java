@@ -8,7 +8,7 @@ import java.util.Date;
 public class File extends BaseBean{
 
     @Id
-    private Integer fileId;
+    private Integer id;
     private String fileName;
     private String storageLocation;         //存储位置
     private Date publishDate;               //发布日期
@@ -21,12 +21,12 @@ public class File extends BaseBean{
 
     public File(){}
 
-    public Integer getFileId() {
-        return fileId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setFileId(Integer fileId) {
-        this.fileId = fileId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFileName() {

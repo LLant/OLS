@@ -10,8 +10,8 @@ import javax.persistence.Id;
 public class Teacher extends BaseBean{
 
     @Id
-    private Integer teacherId;
-    private String teacherName;
+    private Integer id;
+        private String teacherName;
     private String realName;
     private transient String teacherPassword;
     private String teacherEmail;
@@ -21,12 +21,12 @@ public class Teacher extends BaseBean{
 
     public Teacher(){}
 
-    public Integer getTeacherId() {
-        return teacherId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setTeacherId(Integer teacherId) {
-        this.teacherId = teacherId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTeacherName() {
