@@ -1,15 +1,9 @@
-package org.gdpu.ols.model;
+package org.gdpu.ols.bean;
 
-import org.apache.ibatis.type.Alias;
 import org.gdpu.ols.common.BaseBean;
 
-import javax.persistence.Id;
+public class TeacherCustom extends BaseBean {
 
-
-@Alias("teacher")
-public class Teacher extends BaseBean{
-
-    @Id
     private Integer id;
     private String teacherName;
     private String realName;
@@ -19,8 +13,6 @@ public class Teacher extends BaseBean{
     private String degree;
     private String university;
     private String selfIntroduction;
-
-    public Teacher(){}
 
     public Integer getId() {
         return id;
@@ -36,6 +28,14 @@ public class Teacher extends BaseBean{
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getTeacherPassword() {
@@ -76,14 +76,6 @@ public class Teacher extends BaseBean{
 
     public void setUniversity(String university) {
         this.university = university;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
     }
 
     public String getSelfIntroduction() {

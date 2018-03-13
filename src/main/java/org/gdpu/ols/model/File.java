@@ -14,10 +14,8 @@ public class File extends BaseBean{
     private Date publishDate;               //发布日期
     private String fileType;                //文件格式类型
     private Integer author;                 //作者
-    private String fileTheme;               //文件主题（属于哪一类科目文件）
-    private Integer previousFile;           //上一个文件
-    private Integer nextFile;               //下一个文件
-    private Integer mainFile;               //若为附属文件，附属主文件
+    private Integer mainFile;               //若为附属文件，附属主文件 0附属
+    private Integer courseware;
 
     public File(){}
 
@@ -69,28 +67,12 @@ public class File extends BaseBean{
         this.author = author;
     }
 
-    public String getFileTheme() {
-        return fileTheme;
+    public Integer getCourseware() {
+        return courseware;
     }
 
-    public void setFileTheme(String fileTheme) {
-        this.fileTheme = fileTheme;
-    }
-
-    public Integer getPreviousFile() {
-        return previousFile;
-    }
-
-    public void setPreviousFile(Integer previousFile) {
-        this.previousFile = previousFile;
-    }
-
-    public Integer getNextFile() {
-        return nextFile;
-    }
-
-    public void setNextFile(Integer nextFile) {
-        this.nextFile = nextFile;
+    public void setCourseware(Integer courseware) {
+        this.courseware = courseware;
     }
 
     public Integer getMainFile() {

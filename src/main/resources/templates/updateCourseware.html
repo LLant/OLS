@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <meta charset="UTF-8">
+    <link type="text/css" href="/css/bootstrap.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script src="/js/bootstrapValidator.min.js"></script>
+    <link type="text/css" href="/css/bootstrapValidator.css" rel="stylesheet"/>
+    <link type="text/css" href="/css/fileinput.css" rel="stylesheet"/>
+    <script src="/js/fileinput.js"></script>
+    <script src="/js/zh.js"></script>
+    <script src="/js/updateCourseware.js"></script>
+    <style>
+        .apply-info{
+            width: 50%;
+        }
+    </style>
+<div class="container-fluid">
+    <div class="apply-info">
+        <form id="course_form">
+            <div class="form-group">
+                <label>课程名称</label>
+                <input type="text" class="form-control" name="courseName" id="courseName"/>
+            </div>
+            <div class="form-group">
+                <label>课程介绍</label>
+                <textarea class="form-control" rows="3" name="courseIntroduction" id="courseIntroduction"></textarea>
+            </div>
+            <div class="form-group">
+                <label>课程提示</label>
+                <textarea class="form-control" rows="3" name="courseTip" id="courseTip"></textarea>
+            </div>
+            <div class="form-group">
+                <label>封面图片</label>
+                <input id="coursewarePhoto" name="coursewarePhoto" type="file" class="file"/>
+            </div>
+            <div class="form-group">
+                <div class="form-group form-inline">
+                    <label for="coursewareVedio">视频文件</label>
+                    <input id="coursewareVedio" type="file"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group form-inline">
+                    <label for="attach">附带文件</label>
+                    <input id="attach" type="file"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" name="submit" class="btn btn-primary">提交</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('#course_form').get(0).addEventListener('submit',function (ev) {
+
+        });
+
+
+    });
+</script>
+</html>

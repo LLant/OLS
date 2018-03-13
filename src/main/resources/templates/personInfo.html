@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -42,7 +44,7 @@
                 </div>
             </div>
             <div class="item follow">
-                <a href="#" class="set-btn">
+                <a href="#" class="set-btn" id="apply_teacher">
                     申请讲师
                 </a>
             </div>
@@ -59,26 +61,41 @@
                         <li><a href="#" class="list-group-item active">修改信息</a> </li>
                         <li><a href="#" class="list-group-item">我的笔记</a> </li>
                         <li><a href="#" class="list-group-item">我的分享</a> </li>
+                        <li><a href="#" class="list-group-item">发布课程</a> </li>
                     </ul>
                 </div>
             </div>
         </div>
 
         <div class="col-md-9 col-xs-8" id="right">
-                <div class="form-group form-inline">
-                    <label for="newPassword">新密码</label>
-                    <input type="text" class="form-control" id="newPassword" placeholder="********">
+                <div id="section-0">
+                    <div class="form-group form-inline">
+                        <label for="newPassword">新密码</label>
+                        <input type="text" class="form-control" id="newPassword" placeholder="********">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="newEmail">&nbsp;Email</label>
+                        <input type="email" class="form-control" id="newEmail" placeholder="jane.doe@example.com">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="new_image">上传头像</label>
+                        <input id="new_image" type="file"/>
+                    </div>
+                    <button class="btn btn-primary" onclick="updateInfo();">提交</button>
+                    <button class="btn btn-warning">取消</button>
                 </div>
-                <div class="form-group form-inline">
-                    <label for="newEmail">&nbsp;Email</label>
-                    <input type="email" class="form-control" id="newEmail" placeholder="jane.doe@example.com">
+                <div id="section-1" hidden="hidden">
+
                 </div>
-                <div class="form-group form-inline">
-                    <label for="new_image">上传头像</label>
-                    <input type="file" id="new_image" />
+                <div id="section-2" hidden="hidden">
+
                 </div>
-                <button class="btn btn-primary" onclick="updateInfo();">提交</button>
-                <button class="btn btn-warning">取消</button>
+                <div id="section-3" hidden="hidden">
+                    <div th:include="updateCourseware"></div>
+                </div>
+                <div id="section-4" hidden="hidden">
+                    <div th:include="apply"></div>
+                </div>
         </div>
     </div>
 </div>
@@ -101,10 +118,41 @@
                 }
             });
         });
+        $('#apply_teacher').click(function () {
+            $('#section-4').parent().children().hide();
+            $('#section-4').show();
+        });
         $('.list-group ul a').click(function(){
             $('.list-group ul a').removeClass('active');
-            /*console.log($(this));*/
             $(this).addClass('active');
+
+            var index=$(this).parent().index();
+            switch (index){
+                case 0:{
+                    $('#section-0').parent().children().hide();
+                    $('#section-0').show();
+                };break;
+                case 1:{
+                    $('#section-1').parent().children().hide();
+                    $('#section-1').show();
+                };break;
+                case 2:{
+                    $('#section-2').parent().children().hide();
+                    $('#section-2').show();
+                };break;
+                case 2:{
+                    $('#section-2').parent().children().hide();
+                    $('#section-2').show();
+                };break;
+                case 3:{
+                    $('#section-3').parent().children().hide();
+                    $('#section-3').show();
+                };break;
+                default:{
+                    $('#section-1').parent().children().hide();
+                    $('#section-1').show();
+                };
+            }
         });
 
         function validate_image(){
@@ -135,27 +183,26 @@
             if(validate_image()!="true"){
                 return;
             }
-            var formData=new FormData($('#info')[0]);
+            var formData=new FormData();
             formData.append("password",$('#newPassword').val());
             formData.append("email",$('#newEmail').val());
-            formData.append("image",$('#new_image')[0]);
+            formData.append("image",$("#new_image")[0].files[0]);
 
             $.ajax({
                 type:'POST',
                 url:'http://localhost:8080/OLS/info/updateInfo',
-                dataType:'JSON',
+                /*dataType:'JSON',*/
+                enctype:'multipart/form-data',
                 data:formData,
+                cache:false,
                 processData: false,
                 contentType: false, // 注意这里应设为false
                 success:function(data){
-                    $('#user_email').text(data.studentEmail);
-                    $("#user_image").attr('src', data.photoStorageLocation);
-                    $('#newEmail').attr('placeholder',data.studentEmail);
-                    $('#newEmail').val('');
-                    $('#newPassword').val('');
+                   console.log("success");
                 }
             });
         }
+
     </script>
 </body>
 </html>

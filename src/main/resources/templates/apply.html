@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <meta charset="UTF-8">
+    <link type="text/css" href="/css/bootstrap.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script src="/js/bootstrapValidator.min.js"></script>
+    <link type="text/css" href="/css/bootstrapValidator.css" rel="stylesheet"/>
+    <script src="/js/apply.js"></script>
+    <style>
+        .apply-info{
+            width: 50%;
+        }
+    </style>
+<div class="container-fluid">
+    <div class="apply-info">
+        <form id="info_form">
+            <div class="form-group">
+                <label>真实姓名</label>
+                <input type="text" class="form-control" name="realName" id="realName"/>
+            </div>
+            <div class="form-group">
+                <label>毕业院校</label>
+                <input type="text" class="form-control" name="university" id="university"/>
+            </div>
+            <div class="form-group">
+                <label>学位</label>
+                <input type="text" class="form-control" name="degree" id="degree"/>
+            </div>
+            <div class="form-group">
+                <label>介绍自我</label>
+                <textarea class="form-control" rows="3" name="self_introduction" id="self_introduction"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" name="submit" class="btn btn-primary">提交</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('#info_form').get(0).addEventListener('submit',function (ev) {
+            var data={realName:$('#realName').val(),university:$('#university').val(),
+                degree:$('#degree').val(),selfIntroduction:$('#self_introduction').val()};
+            $.ajax({
+                url:'http://localhost:8080/OLS/info/applyInfo',
+                type:'POST',
+                data:JSON.stringify(data),
+                cache:false,
+                contentType:'application/json;charset=UTF-8',
+                success:function (data) {
+                    console.log(data.resultMessage);
+                }
+            });
+        });
+    });
+</script>
+</html>

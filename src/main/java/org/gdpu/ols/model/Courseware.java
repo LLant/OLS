@@ -17,6 +17,8 @@ public class Courseware extends BaseBean {
     private String coursewareIntroduction;      //课程简介
     private String coursewareTip;               //课程须知
     private String coursewareContent;           //课程内容
+    private Integer previousCourseware;
+    private Integer nextCourseware;
 
     public Courseware(){}
 
@@ -90,5 +92,21 @@ public class Courseware extends BaseBean {
 
     public void setCoursewareContent(String coursewareContent) {
         this.coursewareContent = coursewareContent;
+    }
+
+    public Integer getPreviousCourseware() {
+        return previousCourseware;
+    }
+
+    public void setPreviousCourseware(Integer previousCourseware) {
+        this.previousCourseware = previousCourseware;
+    }
+
+    public Integer getNextCourseware() {
+        return nextCourseware;
+    }
+
+    public void setNextCourseware(Integer nextCourseware) {
+        this.nextCourseware = nextCourseware;
     }
 }

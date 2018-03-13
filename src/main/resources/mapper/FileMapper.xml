@@ -12,24 +12,22 @@
         <result column="publish_date" property="publishDate"/>
         <result column="file_type" property="fileType"/>
         <result column="author" property="author"/>
-        <result column="file_theme" property="fileTheme"/>
         <result column="main_file" property="mainFile"/>
-        <result column="previous_file" property="previousFile"/>
-        <result column="next_file" property="nextFile"/>
+        <result column="courseware" property="courseware"/>
     </resultMap>
 
-    <!--批添加学生信息-->
+    <!--批添加文件信息-->
     <insert id="addFileBatch" useGeneratedKeys="true" parameterType="java.util.List">
         <selectKey resultType="java.lang.Integer" order="AFTER">
             SELECT
             LAST_INSERT_ID()
         </selectKey>
         INSERT INTO file(file_name,storage_location,publish_date,file_type,author,
-        file_theme,courseware,previousFile,nextFile)
+        mainFile,courseware)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.fileName},#{item.storageLocation},#{item.publishDate},#{item.fileType}
-            ,#{item.author},#{item.fileTheme},#{item.mainFile},#{item.previousFile},#{item.nextFile})
+            ,#{item.author},#{item.mainFile},#{item.courseware})
         </foreach>
     </insert>
 </mapper>

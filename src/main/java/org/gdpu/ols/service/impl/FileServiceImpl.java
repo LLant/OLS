@@ -8,20 +8,12 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class FileServiceImpl extends AbstractService<File> implements FileService{
 
     @Resource
     private FileMapper fileMapper;
 
-    @Override
-    public Boolean addFile(List<File> fileList) {
-        int i=0;
-        i=this.fileMapper.addFileBatch(fileList);
-        if (i==0) {
-            return false;
-        }else {
-            return true;
-        }
-    }
 }

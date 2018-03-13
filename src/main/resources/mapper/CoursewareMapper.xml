@@ -15,6 +15,14 @@
         <result column="courseware_introduction" property="coursewareIntroduction"/>
         <result column="courseware_tip" property="coursewareTip"/>
         <result column="courseware_content" property="coursewareContent"/>
+        <result column="previous_courseware" property="previousCourseware"/>
+        <result column="next_courseware" property="nextCourseware"/>
     </resultMap>
 
+    <insert id="addSingleCourseware" parameterType="courseware" useGeneratedKeys="true" keyProperty="id">
+        insert into courseware(courseware_name, author,courseware_publish_date,courseware_status,
+        courseware_introduction,courseware_tip)
+        values(#{courseware.coursewareName}, #{courseware.author},#{courseware.coursewarePublishDate},
+        #{courseware.coursewareStatus},#{courseware.coursewareIntroduction},#{courseware.coursewareTip})
+    </insert>
 </mapper>
