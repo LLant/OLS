@@ -1,32 +1,34 @@
 package org.gdpu.ols.controller;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.gdpu.ols.bean.TeacherCustom;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.gdpu.ols.bean.MyPageRequest;
+import org.gdpu.ols.common.BaseController;
 import org.gdpu.ols.common.ResponseBean;
+import org.gdpu.ols.model.Courseware;
 import org.gdpu.ols.model.File;
 import org.gdpu.ols.model.Student;
+import org.gdpu.ols.model.ViewCoursewareDetail;
 import org.gdpu.ols.service.CoursewareService;
 import org.gdpu.ols.service.FileService;
-import org.gdpu.ols.util.FileUtil;
+import org.gdpu.ols.service.ViewCoursewareDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
-@RequestMapping("/courseware")
-public class FileController {
+@Controller
+@RequestMapping("/OLS/courseware")
+public class FileController extends BaseController{
 
     private static final String ERROR_CODE="9999";
     private static final String SUCCESS_CODE="8888";
@@ -34,16 +36,18 @@ public class FileController {
 
     @Resource
     private FileService fileService;
-
     @Resource
     private CoursewareService coursewareService;
+    @Resource
+    private ViewCoursewareDetailService viewCoursewareDetailService;
 
-    @PostMapping(value = "/update")
+
+    @PostMapping(value = "/add")
     @ResponseBody
-    @Transactional
     public ResponseBean updateCourseware(@RequestParam(value = "photo", required = false) MultipartFile photo,
                                          @RequestParam(value = "video", required = false) MultipartFile video,
                                          @RequestParam(value = "attach", required = false) MultipartFile attach,
+                                         @RequestParam(value = "courseType", required = true) String courseType,
                                          @RequestParam(value = "courseName", required = true) String courseName,
                                          @RequestParam(value = "courseIntroduction", required = true) String courseIntroduction,
                                          @RequestParam(value = "courseTip", required = true) String courseTip,
@@ -58,9 +62,15 @@ public class FileController {
             return responseBean;
         }
         String currentTime = String.valueOf(System.currentTimeMillis());
-        String savePath="/images/" + user.getId() + "/" + currentTime + "/";
-        int coursewareId=this.coursewareService.addSingleCourseware(courseName,courseIntroduction,courseTip,
-                user.getId());
+        String savePath="/file/" + user.getId() + "/" + currentTime + "/";
+        Courseware courseware=null;
+        courseware=this.coursewareService.addSingleCourseware(courseName,courseIntroduction,courseTip,
+                "审核中",user.getId(),courseType,
+                savePath+photo.getOriginalFilename());
+        int coursewareId=0;
+        if(courseware!=null){
+            coursewareId=courseware.getId();
+        }
         try {
             if (!photo.isEmpty()) {
                 this.saveFile(photo, savePath,user.getId(),coursewareId);
@@ -68,7 +78,7 @@ public class FileController {
             if (!video.isEmpty()) {
                 this.saveFile(video, savePath,user.getId(),coursewareId);
             }
-            if (!attach.isEmpty()) {
+            if (attach!=null) {
                 this.saveFile(attach, savePath,user.getId(),coursewareId);
             }
         } catch (IOException e) {
@@ -88,7 +98,7 @@ public class FileController {
         String savePath = systemPath.substring(1, systemPath.length())+path;
         java.io.File uploadPath = new java.io.File(savePath);
         if (!uploadPath.exists()) {
-            uploadPath.mkdir();
+            uploadPath.mkdirs();
         }
         java.io.File uploadPic = new java.io.File(uploadPath + "/" + file.getOriginalFilename());
         if (uploadPic.exists()) {
@@ -100,10 +110,10 @@ public class FileController {
         File file1=new File();
         file1.setAuthor(author);
         file1.setCourseware(courseware);
-        file1.setStorageLocation(path);
+        file1.setStorageLocation(path+file.getOriginalFilename());
+        file1.setFileName(file.getOriginalFilename());
 
         String[] names=file.getOriginalFilename().split("\\.");
-        file1.setFileName(file.getOriginalFilename());
         file1.setFileType(names[1]);
         if("mp4".equals(names[1]) || "avi".equals(names[1])){
             file1.setMainFile(1);
@@ -112,6 +122,51 @@ public class FileController {
         }
         file1.setPublishDate(new Date());
         this.fileService.save(file1);
-
     }
+
+    @ResponseBody
+    @PostMapping(value = "/getCoursewareInfo")
+    public ResponseBean getCoursewareByPageAndCondition(@RequestBody MyPageRequest myPageRequest){
+
+        PageHelper.startPage(Integer.parseInt(myPageRequest.getOffset()),
+                Integer.parseInt(myPageRequest.getLimit()));
+        List<ViewCoursewareDetail> list=null;
+
+        StringBuilder query=new StringBuilder();
+        int sign=0;
+        if(!StringUtils.isEmpty(myPageRequest.getCondition())){
+            query.append("courseware_name like '%"+myPageRequest.getCondition()+"%' ");
+            sign++;
+        }
+        if(!StringUtils.isEmpty(myPageRequest.getAspect())){
+            if (sign!=0){
+                query.append("and ");
+            }
+            query.append("aspect = '"+myPageRequest.getAspect()+"'");
+            sign++;
+        }
+        if (!StringUtils.isEmpty(myPageRequest.getCategory())){
+            if(sign!=0){
+                query.append("and ");
+            }
+            query.append("category = '"+myPageRequest.getCategory()+"'");
+            sign++;
+        }
+
+        if(sign==0){
+            list=this.viewCoursewareDetailService.findAll();
+        }else {
+            Condition condition=new Condition(Courseware.class);
+            condition.createCriteria().andCondition(query.toString());
+            condition.setOrderByClause("courseware_publish_date desc");
+            list=this.viewCoursewareDetailService.findByCondition(condition);
+        }
+
+        PageInfo pageInfo=new PageInfo(list);
+        ResponseBean responseBean=new ResponseBean();
+        responseBean.setData(pageInfo);
+        responseBean.setResultCode(SUCCESS_CODE);
+        return responseBean;
+    }
+
 }

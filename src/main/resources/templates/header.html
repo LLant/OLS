@@ -26,16 +26,16 @@
             </div>
 
             <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="/OLS/">首页</a></li>
-                    <li><a href="/OLS/course">课程</a></li>
+                <ul class="nav navbar-nav" id="nav">
+                    <li><a href="/OLS/">首页</a></li>
+                    <li><a href="/OLS/course/">课程</a></li>
                     <li><a href="#">手记</a></li>
                 </ul>
-                <form class="navbar-form navbar-left">
+                <form class="navbar-form navbar-left" id="search_form">
                     <div class="form-group">
-                        <input type="text" placeholder="Search" class="form-control" />
+                        <input type="text" placeholder="Search" class="form-control" id="condition"/>
                     </div>
-                    <button type="submit" class="btn btn-success">搜索</button>
+                    <button type="button" class="btn btn-success" onclick="setCondition()">搜索</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#" type="button" data-target="#login" data-toggle="modal" id="button1">登录</a></li>
@@ -54,9 +54,36 @@
     </nav>
 </div>
 <script>
-    $(document).ready(
-        isLogin()
-    );
+//    $.ajax({
+//        url:'http://localhost:8080/OLS/getCondition',
+//        type:'POST',
+//        success:function (data) {
+//            console.log(data);
+//            var obj=eval('('+data+')');
+//            console.log(obj.condition);
+//            $('#condition').val(obj.condition);
+//        }
+//    });
+//    function setCondition() {
+//            $.ajax({
+//                url:'http://localhost:8080/OLS/setCondition',
+//                data:JSON.stringify({condition:$('#condition').val()}),
+//                contentType:'application/json',
+//                type:'POST',
+//                success:function () {
+//                    window.location.href="http://localhost:8080/OLS/course";
+//                }
+//            });
+//    }
+
+    $(document).ready(function(){
+        isLogin();
+        activeLi();
+    });
+    function activeLi() {
+
+        $("#nav li").eq(liIndex).addClass('active');
+    }
     $('#loginOut').on('click',function () {
         $.ajax({
             url: 'http://localhost:8080/OLS/loginOut',

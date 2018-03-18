@@ -14,18 +14,24 @@ import java.util.Date;
 @Transactional(rollbackFor = Exception.class)
 public class CoursewareServiceImpl extends AbstractService<Courseware> implements CoursewareService {
 
+
     @Resource
     private CoursewareMapper coursewareMapper;
     @Override
-    public int addSingleCourseware(String coursewareName, String coursewareIntroduction, String coursewareTip, Integer author) {
+    public Courseware addSingleCourseware(String coursewareName, String coursewareIntroduction,
+                                          String coursewareTip,String coursewareStatus, Integer author,
+                                          String courseType,String coursewarePhotoLocation) {
         Courseware courseware=new Courseware();
         courseware.setCoursewarePublishDate(new Date());
-        courseware.setCoursewareStatus("审核中");
         courseware.setCoursewareName(coursewareName);
+        courseware.setCoursewareStatus(coursewareStatus);
         courseware.setCoursewareIntroduction(coursewareIntroduction);
         courseware.setCoursewareTip(coursewareTip);
         courseware.setAuthor(author);
+        courseware.setCoursewareType(Integer.parseInt(courseType));
+        courseware.setCoursewarePhotoLocation(coursewarePhotoLocation);
 
-        return this.coursewareMapper.addSingleCourseware(courseware);
+        this.coursewareMapper.addSingleCourseware(courseware);
+        return courseware;
     }
 }

@@ -1,5 +1,6 @@
 package org.gdpu.ols.controller;
 
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.gdpu.ols.bean.UserBean;
 import org.gdpu.ols.common.BaseController;
 import org.gdpu.ols.common.ResponseBean;
@@ -14,7 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,4 +174,23 @@ public class HomeController extends BaseController {
         System.out.println(responseBean.toString());
         return responseBean;
     }
+
+//    @PostMapping(value = "/setCondition")
+//    @ResponseBody
+//    public String setCondition(@RequestBody String condition,HttpSession session){
+//        session.setAttribute("condition",condition);
+//        return "success";
+//    }
+//
+//    @PostMapping(value = "/getCondition")
+//    @ResponseBody
+//    public String getCondition(HttpServletRequest request,HttpSession session){
+//
+//        String condition="";
+//        if(session.getAttribute("condition")!=null){
+//            condition= (String) session.getAttribute("condition");
+//            session.removeAttribute("condition");
+//        }
+//        return condition;
+//    }
 }

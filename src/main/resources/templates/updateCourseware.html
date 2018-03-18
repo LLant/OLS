@@ -31,6 +31,11 @@
                 <textarea class="form-control" rows="3" name="courseTip" id="courseTip"></textarea>
             </div>
             <div class="form-group">
+                <label>课程类型</label>
+                <select class="form-control select select-primary" data-toggle="select" id="categorys">
+                </select>
+            </div>
+            <div class="form-group">
                 <label>封面图片</label>
                 <input id="coursewarePhoto" name="coursewarePhoto" type="file" class="file"/>
             </div>
@@ -56,11 +61,44 @@
 <script>
     $(document).ready(function () {
 
-        $('#course_form').get(0).addEventListener('submit',function (ev) {
-
+        $.ajax({
+            url:'http://localhost:8080/OLS/courseType/getCategory',
+            type:'POST',
+            success:function (data) {
+                console.log(typeof(data));
+                var htm='';
+                $.each(data,function (id,obj) {
+                    console.log(obj.id+obj.category);
+                    htm+="<option value='"+obj.id+"'>"+obj.category+"</option>";
+                });
+                $('#categorys').append(htm);
+            }
         });
 
+        $('#course_form').get(0).addEventListener('submit',function (ev) {
+            var formData=new FormData();
+            formData.append("courseName",$('#courseName').val());
+            formData.append("courseIntroduction",$('#courseIntroduction').val());
+            formData.append("courseTip",$('#courseTip').val());
+            formData.append("courseType",$("#categorys option:selected").val());
+            formData.append("photo",$("#coursewarePhoto")[0].files[0]);
+            formData.append("video",$("#coursewareVedio")[0].files[0]);
+            formData.append("attach",$("#attach")[0].files[0]);
 
+            $.ajax({
+                type:'POST',
+                url:'http://localhost:8080/OLS/courseware/add',
+                /*dataType:'JSON',*/
+                enctype:'multipart/form-data',
+                data:formData,
+                cache:false,
+                processData: false,
+                contentType: false, // 注意这里应设为false
+                success:function(data){
+                    $('#course_form').reset();
+                }
+            });
+        });
     });
 </script>
 </html>

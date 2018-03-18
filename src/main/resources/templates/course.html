@@ -7,6 +7,7 @@
     <link type="text/css" href="/css/bootstrap.css" rel="stylesheet"/>
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-paginator.js"></script>
     <script type="text/javascript" src="/js/course.js"></script>
     <link href="/css/course.css" rel="stylesheet"/>
     <link href="/css/common.css" rel="stylesheet"/>
@@ -17,98 +18,151 @@
     <div class="category-list-section">
         <div class="list-left">
             <ul class="itemUl">
-                <li><span>最新上线</span></li>
+                <li><span>方向</span></li>
             </ul>
             <ul class="itemUl">
-                <li><span>所有风格</span></li>
+                <li><span>分类</span></li>
             </ul>
         </div>
         <div class="list-main">
-            <ul class="itemUl">
-                <li class="active"><a href="#">最多金额</a></li>
-                <li class=""><a href="#">最多支持</a></li>
+            <ul class="itemUl" id="aspectUl">
             </ul>
 
-            <ul class="itemUl style">
-                <li class="active"><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">流行</a></li>
-                <li class=""><a href="#">其他</a></li>
+            <ul class="itemUl style" id="categoryUl">
             </ul>
         </div>
     </div>
 </div>
+<div class="row content" id="coursewareContent">
+    <!--<div class="col-xs-6 col-md-2 col-md-offset-1">
+        <a href="#" class="thumbnail">
+            <img src="/images/photo.svg" alt="..." style="width: 100%;">
+            <div class="caption">
+                <h4>Thumbnail label</h4>
+                <span class="label label-default">前端开发</span>
+                <span class="label label-default">HTML/CSS</span>
+                <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
+                      aria-hidden="true">541</span>
+            </div>
+        </a>
+    </div>-->
+</div>
 <div class="row content">
-    <div class="col-xs-6 col-md-2 col-md-offset-1">
-        <a href="#" class="thumbnail">
-            <img src="/images/photo.svg" alt="..." style="width: 100%;">
-            <div class="caption">
-                <h4>Thumbnail label</h4>
-                <span class="label label-default">SpringBoot</span>
-                <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                      aria-hidden="true">541</span>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-            <img src="/images/photo.svg" alt="..." style="width: 100%;">
-            <div class="caption">
-                <h4>Thumbnail label</h4>
-                <span class="label label-default">SpringBoot</span>
-                <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                      aria-hidden="true">541</span>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-            <img src="/images/photo.svg" alt="..." style="width: 100%;">
-            <div class="caption">
-                <h4>Thumbnail label</h4>
-                <span class="label label-default">SpringBoot</span>
-                <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                      aria-hidden="true">541</span>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-            <img src="/images/photo.svg" alt="..." style="width: 100%;">
-            <div class="caption">
-                <h4>Thumbnail label</h4>
-                <span class="label label-default">SpringBoot</span>
-                <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                      aria-hidden="true">541</span>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-xs-6 col-md-2">
-        <a href="#" class="thumbnail">
-            <img src="/images/photo.svg" alt="..." style="width: 100%;">
-            <div class="caption">
-                <h4>Thumbnail label</h4>
-                <span class="label label-default">SpringBoot</span>
-                <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                      aria-hidden="true">541</span>
-            </div>
-        </a>
-    </div>
+    <div id="paginator" style="text-align: center;cursor:pointer;"><ul id="pageLimit"></ul></div>
 </div>
 <div id="footer" th:include="footer"></div>
+<script>
+
+    var liIndex=1;
+    var pagecount;
+    var pageNum;
+    $.ajax({
+        url:'http://localhost:8080/OLS/courseType/getAll',
+        type:'POST',
+        async:false,
+        success:function (data) {
+            var aspect=data.aspect;
+            var category=data.category;
+            var aspectUl='';
+            var categoryUl='';
+            aspectUl+="<li class='active'>" +
+                "<a value='' href='javascript:loadCoursewareInfo(1,15,$(\"#condition\").val(),\"\",$(\"#categoryUl .active a\").attr(\"value\"));'>全部</a></li>";
+            $.each(aspect,function (id,item) {
+                aspectUl+="<li><a value='"+item+"' href='javascript:loadCoursewareInfo(1,15,$(\"#condition\").val(),\""+item+"\",$(\"#categoryUl .active a\").attr(\"value\"));'>"+item+"</a></li>";
+            });
+            $('#aspectUl').append(aspectUl);
+            categoryUl+="<li class='active'><a href='javascript:loadCoursewareInfo(1,15,$(\"#condition\").val(),$(\"#aspectUl .active a\").attr(\"value\"),\"\");' value=''>全部</a></li>";
+            $.each(category,function (id,item) {
+                categoryUl+="<li><a value='"+item+"' href='javascript:loadCoursewareInfo(1,15,$(\"#condition\").val(),$(\"#aspectUl .active a\").attr(\"value\"),\""+item+"\");'>"+item+"</a></li>";
+            });
+            $('#categoryUl').append(categoryUl);
+        }
+    });
+
+    loadCoursewareInfo(1,15,$('#condition').val(),$("#aspectUl .active a").attr("value"),$("#categoryUl .active a").attr("value"));
+//    console.log($('#aspectUl .active a').attr("value"));
+//    console.log($('#categoryUl .active a').attr("value"));
+    function loadCoursewareInfo(offset,limit,condition,aspect,category) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/courseware/getCoursewareInfo',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit,condition:condition,aspect:aspect,category:category}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showCoursewareInfo(data);
+            }
+        });
+    }
+    function loadPaginator() {
+        $('#pageLimit').bootstrapPaginator({
+            currentPage: pageNum,
+            totalPages: pagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadCoursewareInfo(page,15,$('#condition').val(),$("#aspectUl .active a").attr("value"),$("#categoryUl .active a").attr("value"));
+            }
+        });
+    }
+
+
+    function showCoursewareInfo(data) {
+        var data=data.data;
+        pagecount=data.pages;
+        pageNum=data.pageNum;
+        console.log("pagecount:",pagecount);
+        var coursewareList=data.list;
+        var htm='';
+        $('#coursewareContent').html("");
+        $.each(coursewareList,function (id,courseware) {
+            if(id%5==0){
+                htm+="<div class='col-xs-6 col-md-2 col-md-offset-1'>";
+            }else {
+                htm+="<div class='col-xs-6 col-md-2'>"
+            }
+            htm+="<a href='#' class='thumbnail'>";
+            if(courseware.coursewarePhotoLocation!=null){
+                htm+="<img src='"+courseware.coursewarePhotoLocation+"' alt='"+courseware.coursewareName+"' style='width: 100%;'>";
+            }else {
+                htm += "<img src='/images/photo.svg' alt='" + courseware.coursewareName + "' style='width: 100%;'>";
+            }
+            htm +="<div class='caption'>"+
+                "<h5>"+formatStr(courseware.coursewareName,10)+"</h5>"+
+                "<span class='label label-default'>"+courseware.aspect+"</span>"+"&nbsp;&nbsp;"+
+                "<span class='label label-default'>"+courseware.category+"</span>"+
+                "</div>"+
+                "</a>"+
+                "</div>";
+        });
+        $('#coursewareContent').append(htm);
+        if(pagecount==0){
+            $('#pageLimit').html("");
+        }
+        loadPaginator();
+    }
+    function formatStr(str,length) {
+        if(str.length>length)
+            return str.substring(0,length)+"...";
+        else
+            return str;
+    }
+</script>
 </body>
 </html>

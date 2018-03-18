@@ -3,31 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace必须指向Dao接口 -->
-<mapper namespace="org.gdpu.ols.mapper.CoursewareMapper">
+<mapper namespace="org.gdpu.ols.mapper.ViewCoursewareDetailMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
-    <resultMap id="courseware" type="org.gdpu.ols.model.Courseware">
+    <resultMap id="viewCoursewareDetail" type="org.gdpu.ols.model.ViewCoursewareDetail">
         <id column="id" property="id"></id>
         <result column="courseware_name" property="coursewareName"/>
         <result column="author" property="author"/>
-        <result column="examiner" property="examiner"/>
         <result column="courseware_publish_date" property="coursewarePublishDate"/>
         <result column="courseware_status" property="coursewareStatus"/>
         <result column="courseware_introduction" property="coursewareIntroduction"/>
         <result column="courseware_tip" property="coursewareTip"/>
         <result column="courseware_content" property="coursewareContent"/>
-        <result column="previous_courseware" property="previousCourseware"/>
-        <result column="next_courseware" property="nextCourseware"/>
-        <result column="courseware_type" property="coursewareType"/>
         <result column="courseware_photo_location" property="coursewarePhotoLocation"/>
-
+        <result column="aspect" property="aspect"/>
+        <result column="category" property="category"/>
     </resultMap>
-
-    <insert id="addSingleCourseware" parameterType="org.gdpu.ols.model.Courseware" useGeneratedKeys="true" keyProperty="id">
-
-        insert into courseware(courseware_name, author,courseware_publish_date,courseware_status,
-        courseware_introduction,courseware_tip,courseware_type,courseware_photo_location)
-        values(#{coursewareName}, #{author},#{coursewarePublishDate},
-        #{coursewareStatus},#{coursewareIntroduction},#{coursewareTip},#{coursewareType},#{coursewarePhotoLocation})
-    </insert>
 
 </mapper>
