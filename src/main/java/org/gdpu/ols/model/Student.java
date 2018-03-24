@@ -16,6 +16,8 @@ public class Student extends BaseBean {
     private String studentEmail;
     private String studentSex;
     private String photoStorageLocation;         //图片存储位置
+    private String status;
+    private Integer teacherId;
 
     public Student(){}
 
@@ -67,6 +69,22 @@ public class Student extends BaseBean {
         this.photoStorageLocation = photoStorageLocation;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -76,6 +94,8 @@ public class Student extends BaseBean {
                 ", studentEmail='" + studentEmail + '\'' +
                 ", studentSex='" + studentSex + '\'' +
                 ", photoStorageLocation='" + photoStorageLocation + '\'' +
+                ", status='" + status + '\'' +
+                ", teacherId=" + teacherId +
                 '}';
     }
 }

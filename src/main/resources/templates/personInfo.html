@@ -31,19 +31,19 @@
                     <span>学习时长</span>
                 </div>
             </div>
-            <div class="item follow">
+            <div class="item follow" id="star">
                 <div>
                     <em>1</em>
                     <span>关注</span>
                 </div>
             </div>
-            <div class="item follow">
+            <div class="item follow" th:if="${status=='T'}">
                 <div>
                     <em>10</em>
                     <span>学生</span>
                 </div>
             </div>
-            <div class="item follow">
+            <div class="item follow" th:if="${status=='S'}">
                 <a href="#" class="set-btn" id="apply_teacher">
                     申请讲师
                 </a>
@@ -61,7 +61,8 @@
                         <li><a href="#" class="list-group-item active">修改信息</a> </li>
                         <li><a href="#" class="list-group-item">我的笔记</a> </li>
                         <li><a href="#" class="list-group-item">我的分享</a> </li>
-                        <li><a href="#" class="list-group-item">发布课程</a> </li>
+                        <li th:if="${status=='T'}"><a href="#" class="list-group-item">发布课程</a> </li>
+                        <li th:if="${status=='T'}"><a href="#" class="list-group-item">已发布课程</a> </li>
                     </ul>
                 </div>
             </div>
@@ -96,6 +97,9 @@
                 <div id="section-4" hidden="hidden">
                     <div th:include="apply"></div>
                 </div>
+                <div id="section-5" hidden="hidden">
+                    <div th:include="starTeacher"></div>
+                </div>
         </div>
     </div>
 </div>
@@ -117,6 +121,10 @@
                     $('newEmail').attr('placeholder','');
                 }
             });
+        });
+        $('#star').click(function () {
+            $('#section-5').parent().children().hide();
+            $('#section-5').show();
         });
         $('#apply_teacher').click(function () {
             $('#section-4').parent().children().hide();

@@ -15,7 +15,14 @@
 <body>
 <div id="header" th:include="header"></div>
 <div id="projects-list" class="container">
+    <div class="input-group col-md-3" style="margin-top: 20px;margin-bottom:20px;float: right;">
+        <input type="text" class="form-control"placeholder="请输入课程名"  id="condition" />
+        <span class="input-group-btn">
+               <button class="btn btn-info btn-success" onclick="search()">查找</button>
+            </span>
+    </div>
     <div class="category-list-section">
+
         <div class="list-left">
             <ul class="itemUl">
                 <li><span>方向</span></li>
@@ -56,6 +63,9 @@
     var liIndex=1;
     var pagecount;
     var pageNum;
+    function search(){
+        loadCoursewareInfo(1,15,$('#condition').val(),$("#aspectUl .active a").attr("value"),$("#categoryUl .active a").attr("value"));
+    }
     $.ajax({
         url:'http://localhost:8080/OLS/courseType/getAll',
         type:'POST',
@@ -121,8 +131,6 @@
             }
         });
     }
-
-
     function showCoursewareInfo(data) {
         var data=data.data;
         pagecount=data.pages;
@@ -137,7 +145,7 @@
             }else {
                 htm+="<div class='col-xs-6 col-md-2'>"
             }
-            htm+="<a href='#' class='thumbnail'>";
+            htm+="<a href='/OLS/course/"+courseware.id+"' class='thumbnail' type='button'>";
             if(courseware.coursewarePhotoLocation!=null){
                 htm+="<img src='"+courseware.coursewarePhotoLocation+"' alt='"+courseware.coursewareName+"' style='width: 100%;'>";
             }else {

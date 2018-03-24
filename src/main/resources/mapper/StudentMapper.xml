@@ -12,6 +12,8 @@
         <result column="student_email" property="studentEmail"/>
         <result column="student_sex" property="studentSex"/>
         <result column="photo_storage_location" property="photoStorageLocation"/>
+        <result column="status" property="status"/>
+        <result column="teacher_id" property="teacherId"/>
     </resultMap>
 
     <!--获取所有的学生-->
@@ -21,7 +23,7 @@
 
     <!--根据studentName获取学生信息-->
     <select id="getStudentByName" resultMap="student" parameterType="java.lang.String">
-        SELECT id,student_name,student_sex,student_email,student_password
+        SELECT id,student_name,student_sex,student_email,student_password,status,teacher_id
         FROM student
         WHERE student_name=#{item.studentName}
     </select>
@@ -32,10 +34,10 @@
             SELECT
             LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO student(student_name,student_sex,student_email,student_password)
+        INSERT INTO student(student_name,student_sex,student_email,student_password,status)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.studentName},#{item.studentSex},#{item.studentEmail},#{item.studentPassword})
+            (#{item.studentName},#{item.studentSex},#{item.studentEmail},#{item.studentPassword},#{item.status})
         </foreach>
     </insert>
     <!--批更新学生信息-->
@@ -49,16 +51,16 @@
     </update>
     <!--验证用户信息-->
     <select id="authenticStudent" parameterType="java.lang.String" resultMap="student">
-        SELECT id,student_name,student_sex,student_email,student_password,photo_storage_location FROM student WHERE student_name=#{studentName}
+        SELECT id,student_name,student_sex,student_email,student_password,photo_storage_location,status,teacher_id FROM student WHERE student_name=#{studentName}
         UNION
-        SELECT id,student_name,student_sex,student_email,student_password,photo_storage_location FROM student WHERE student_email=#{studentEmail}
+        SELECT id,student_name,student_sex,student_email,student_password,photo_storage_location,status,teacher_id FROM student WHERE student_email=#{studentEmail}
     </select>
 
     <!--验证用户信息-->
     <select id="selectStudentByName" parameterType="java.lang.String" resultMap="student">
-        SELECT id,student_name,student_sex,student_email,student_password FROM student WHERE student_name=#{studentName}
+        SELECT id,student_name,student_sex,student_email,student_password,status,teacher_id FROM student WHERE student_name=#{studentName}
     </select>
     <select id="selectStudentByEmail" parameterType="java.lang.String" resultMap="student">
-        SELECT id,student_name,student_sex,student_email,student_password FROM student WHERE student_email=#{studentEmail}
+        SELECT id,student_name,student_sex,student_email,student_password,status,teacher_id FROM student WHERE student_email=#{studentEmail}
     </select>
 </mapper>

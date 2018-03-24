@@ -28,6 +28,12 @@ public class TeacherServiceImpl extends AbstractService<Teacher> implements Teac
     }
 
     @Override
+    public Teacher addSingleTeacher(Teacher teacher) {
+        this.teacherMapper.addSingleTeacher(teacher);
+        return teacher;
+    }
+
+ /*   @Override
     public Teacher authenticTeacher(String teacherNameOrEmail,String teacherPassword) {
         if (teacherNameOrEmail!=null && !"".equals(teacherNameOrEmail)){
             Teacher teacher=null;
@@ -39,5 +45,5 @@ public class TeacherServiceImpl extends AbstractService<Teacher> implements Teac
             }
         }
         return null;
-    }
+    }*/
 }

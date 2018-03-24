@@ -25,9 +25,10 @@
     <insert id="addSingleCourseware" parameterType="org.gdpu.ols.model.Courseware" useGeneratedKeys="true" keyProperty="id">
 
         insert into courseware(courseware_name, author,courseware_publish_date,courseware_status,
-        courseware_introduction,courseware_tip,courseware_type,courseware_photo_location)
+        courseware_introduction,courseware_tip,courseware_type,courseware_photo_location,courseware_content)
         values(#{coursewareName}, #{author},#{coursewarePublishDate},
-        #{coursewareStatus},#{coursewareIntroduction},#{coursewareTip},#{coursewareType},#{coursewarePhotoLocation})
+        #{coursewareStatus},#{coursewareIntroduction},#{coursewareTip},#{coursewareType}
+        ,#{coursewarePhotoLocation},#{coursewareContent})
     </insert>
 
 </mapper>

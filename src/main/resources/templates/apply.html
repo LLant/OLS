@@ -51,6 +51,7 @@
                 cache:false,
                 contentType:'application/json;charset=UTF-8',
                 success:function (data) {
+                    $('#info_form')[0].reset();
                     console.log(data.resultMessage);
                 }
             });

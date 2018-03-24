@@ -7,29 +7,25 @@
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
     <resultMap id="teacher" type="org.gdpu.ols.model.Teacher">
         <id column="id" property="id"></id>
-        <result column="teacher_name" property="teacherName"/>
         <result column="real_name" property="realName"/>
-        <result column="teacher_password" property="teacherPassword"/>
-        <result column="teacher_email" property="teacherEmail"/>
-        <result column="teacher_sex" property="teacherSex"/>
         <result column="degree" property="degree"/>
         <result column="university" property="university"/>
         <result column="self_introduction" property="selfIntroduction"/>
+        <result column="photo_storage_location" property="photoStorageLocation"/>
     </resultMap>
 
     <sql id="teacherColumn">
-        id,teacher_name,real_name,teacher_password,teacher_email,teacher_sex,degree,university
+        id,real_name,degree,university,self_introduction,photo_storage_location
     </sql>
     <!--批量添加老师信息-->
     <insert id="addTeacherBatch" parameterType="java.util.List" useGeneratedKeys="true">
         <selectKey resultType="java.lang.Integer" order="AFTER">
             SELECT LAST_INSERT_id()
         </selectKey>
-        INSERT INTO teacher(teacher_name,real_name,teacher_password,teacher_email,teacher_sex,degree,university)
+        INSERT INTO teacher(real_name,degree,university,self_introduction,photo_storage_location)
         VALUES
         <foreach collection="list" index="index" item="item" separator=",">
-            (#{item.teacherName},#{item.realName},#{item.teacherPassword},#{item.teacherEmail},
-            #{item.teacherSex},#{item.degree},#{item.university})
+            (#{item.realName},#{item.degree},#{item.university},#{item.selfIntroduction},#{item.photoStorageLocation})
         </foreach>
     </insert>
 
@@ -41,4 +37,11 @@
         SELECT
         <include refid="teacherColumn"/> FROM teacher WHERE teacher_email=#{teacherEmail}
     </select>
+    <insert id="addSingleTeacher" parameterType="org.gdpu.ols.model.Teacher" useGeneratedKeys="true" keyProperty="id">
+
+        insert into teacher(degree,university,real_name,self_introduction,
+        photo_storage_location)
+        values(#{degree}, #{university},#{realName},
+        #{selfIntroduction},#{photoStorageLocation})
+    </insert>
 </mapper>

@@ -5,5 +5,5 @@ import org.gdpu.ols.model.Courseware;
 
 public interface CoursewareService extends Service<Courseware> {
     Courseware addSingleCourseware(String coursewareName,String coursewareIntroduction,String coursewareTip,
-                            String coursewareStatus,Integer author,String courseType,String coursewarePhotoLocation);
+                            String coursewareStatus,Integer author,String courseType,String coursewarePhotoLocation,String courseContent);
 }

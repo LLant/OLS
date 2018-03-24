@@ -49,6 +49,7 @@ public class FileController extends BaseController{
                                          @RequestParam(value = "attach", required = false) MultipartFile attach,
                                          @RequestParam(value = "courseType", required = true) String courseType,
                                          @RequestParam(value = "courseName", required = true) String courseName,
+                                         @RequestParam(value = "courseContent", required = true) String courseContent,
                                          @RequestParam(value = "courseIntroduction", required = true) String courseIntroduction,
                                          @RequestParam(value = "courseTip", required = true) String courseTip,
                                          HttpSession session) {
@@ -65,8 +66,8 @@ public class FileController extends BaseController{
         String savePath="/file/" + user.getId() + "/" + currentTime + "/";
         Courseware courseware=null;
         courseware=this.coursewareService.addSingleCourseware(courseName,courseIntroduction,courseTip,
-                "审核中",user.getId(),courseType,
-                savePath+photo.getOriginalFilename());
+                "审核中",user.getTeacherId(),courseType,
+                savePath+photo.getOriginalFilename(),courseContent);
         int coursewareId=0;
         if(courseware!=null){
             coursewareId=courseware.getId();
@@ -118,7 +119,12 @@ public class FileController extends BaseController{
         if("mp4".equals(names[1]) || "avi".equals(names[1])){
             file1.setMainFile(1);
         }else {
-            file1.setMainFile(0);
+            if ("rar".equals(names[1]) || "zip".equals(names[1])){
+                file1.setMainFile(2);
+            }else {
+                file1.setMainFile(0);
+            }
+
         }
         file1.setPublishDate(new Date());
         this.fileService.save(file1);

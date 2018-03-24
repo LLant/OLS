@@ -70,14 +70,8 @@ public class HomeController extends BaseController {
         return SUCCESS_CODE;
     }
 
-    @GetMapping("/course")
-    public String course(){
-        return "course";
-    }
-    @GetMapping("/course/{id:\\d{6}}")
-    public String courseDetail(@PathVariable int id){
-        return "video";
-    }
+
+
 
 
 
@@ -99,6 +93,7 @@ public class HomeController extends BaseController {
                 student.setStudentPassword(userBean.getPassword());
                 student.setStudentEmail(userBean.getEmail());
                 student.setStudentSex("女");
+                student.setStatus("S");
                 List<Student> lists=new ArrayList<Student>();
                 lists.add(student);
                 int i=this.studentService.addStudentBatch(lists);
@@ -152,7 +147,7 @@ public class HomeController extends BaseController {
                         responseBean.setResultMessage("学生用户登录失败");
                     }
                 }break;
-                case 2:{
+                /*case 2:{
                     Teacher teacher=null;
                     teacher=this.teacherService.authenticTeacher(userBean.getUsername(),userBean.getPassword());
                     if (teacher!=null){
@@ -168,7 +163,7 @@ public class HomeController extends BaseController {
                 default:{
                     responseBean.setResultCode(ERROR_CODE);
                     responseBean.setResultMessage("不存在该角色");
-                }
+                }*/
             }
         }
         System.out.println(responseBean.toString());

@@ -14,7 +14,7 @@
 <div id="header" th:include="header"></div>
 <div class="wrapper" style="margin-bottom: 0px;padding-bottom: 0px;">
     <video id="video" controlslist="nodownload" controls="" style="width: 100%;height: 500px;">
-        <source src="https://videos.confidentcustomer.com/assets/ConfidentCustomer.mp4" type="video/mp4">
+        <source th:src="${courseware.videoLocation}" type="video/mp4">
     </video>
 </div>
 <div class="row">
@@ -22,7 +22,8 @@
         <div class="content">
             <div class="course-brief">
                 <div class="autowrapo">
-                    简介：目前业界最流行的微服务架构正在或者已被各种规模的互联网公司广泛接受和认可，业已成为互联网开发人员必备技术。无论是互联网、云计算还是大数据Java平台已成为全栈的生态体系，其重要性几乎不可替代。Spring Boot作为微服务的基础设施之一，背靠强大的Spring 生态社区，支撑Spring Cloud技术体系。本课程通过实战的方式，从单一应用开发升级为多模块应用开发。根据不同的部署场景，构建不同格式的打包文件，以及在开发和部署阶段，执行不同的运行方式。
+                    <span th:text="${courseware.coursewareContent}" th:value="${courseware.id}"
+                          id="courseContent"></span>
                 </div>
             </div>
             <div class="mod-tab-menu">
@@ -34,7 +35,8 @@
             <div id="comment">
                 <div class="mod-qa-list">
                     <div class="qa-medias">
-                        <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40" height="40" style="border-radius: 20px;" /></span>
+                        <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40"
+                                   height="40" style="border-radius: 20px;"/></span>
                     </div>
                     <div class="qa-content">
                         <h2 class="qa-header">
@@ -55,7 +57,8 @@
 
                 <div class="mod-qa-list">
                     <div class="qa-medias">
-                        <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40" height="40" style="border-radius: 20px;" /></span>
+                        <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40"
+                                   height="40" style="border-radius: 20px;"/></span>
                     </div>
                     <div class="qa-content">
                         <h2 class="qa-header">
@@ -77,7 +80,8 @@
             <div id="note" hidden="true">
                 <div class="mod-qa-list">
                     <div class="qa-medias">
-                        <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40" height="40" style="border-radius: 20px;" /></span>
+                        <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40"
+                                   height="40" style="border-radius: 20px;"/></span>
                     </div>
                     <div class="qa-content">
                         <h2 class="qa-header">
@@ -92,8 +96,9 @@
             </div>
 
             <div>
-                <textarea class="form-control" rows="3" placeholder="你的想法..." style="resize: none;margin-top: 15px;margin-bottom:15px;"></textarea>
-                <button type="button" class="btn btn-primary">提交</button>
+                <textarea class="form-control" rows="3" placeholder="你的想法..."
+                          style="resize: none;margin-top: 15px;margin-bottom:15px;" id="noteContent"></textarea>
+                <button type="button" class="btn btn-primary" onclick="submitNote()">提交</button>
             </div>
         </div>
     </div>
@@ -101,41 +106,72 @@
         <div class="mb40">
             <h4>讲师提示</h4>
             <div class="teacher-info">
-                <a href="/u/5387391/courses?sort=publish" target="_blank">
-                    <img data-userid="5387391" class="js-usercard-dialog" src="https//img1.mukewang.com/5a543cf90001d83702560256-80-80.jpg" width="80" height="80">
+                <a href="#" target="_blank">
+                    <img data-userid="5387391" class="js-usercard-dialog" th:src="${courseware.authorPhotoLocation}"
+                         width="80" height="80">
                 </a>
                 <span class="tit">
-                	<a href="/u/5387391/courses?sort=publish" target="_blank">小马哥mercyb...</a>
-                	<button class="btn btn-primary" style="margin-left: 10px;outline: 0;" id="follow" value="0">关注</button>
+                	<a href="#" target="_blank" th:text="${courseware.authorRealName}"></a>
+                	<button class="btn btn-primary" style="margin-left: 10px;outline: 0;" id="follow"
+                            th:value="${courseware.author}">关注</button>
             		</span>
-                <span class="job">JAVA开发工程师</span>
+                <span class="job" th:text="${courseware.authorDegree}"></span>
             </div>
 
             <div class="course-info-tip">
                 <dl class="first">
                     <dt>课程须知</dt>
-                    <dd class="autowrap">
-                        1、具备一定的 Java 编程基础
-                        2、具备Java 企业级开发经验（更佳）
-                        3、熟悉 Spring 框架的从业人员，难度中等以上
-                    </dd>
+                    <dd class="autowrap" th:each="tip:${courseware.coursewareTip}" th:text="${tip}"></dd>
                 </dl>
                 <dl>
                     <dt>老师告诉你能学到什么？</dt>
-                    <dd class="autowrap">
-                        1、Spring Boot 介绍
-                        2、Spring Boot 2.0 新特性
-                        3、Spring Web MVC 学习案例
-                        4、Spring Web Flux学习案例
-                        5、多模块化项目
-                        6、各种Spring Boot构建方式
-                        7、各种 Spring Boot 运行方式
-                    </dd>
+                    <dd class="autowrap" th:each="introduction:${courseware.coursewareIntroduction}"
+                        th:text="${introduction}"></dd>
                 </dl>
             </div>
         </div>
     </div>
 </div>
 <div id="footer" th:include="footer"></div>
+<script>
+//    $.ajax({
+//        url: 'http://localhost:8080/OLS/note/getNote',
+//        type: 'POST',
+//        success:function (data) {
+//
+//        }
+//    });
+
+    function submitNote() {
+        var data = {noteContent: $('#noteContent').val(), coursewareId: $('#courseContent').attr('value')};
+
+        $.ajax({
+            url: 'http://localhost:8080/OLS/note/addNote',
+            data: JSON.stringify(data),
+            type: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            success: function (data) {
+                var htm = '';
+                htm += "<div class=\"mod-qa-list\">\n" +
+                    "                    <div class=\"qa-medias\">\n" +
+                    "                        <span><img src=\"" + data.photoLocation + "\" width=\"40\" height=\"40\" style=\"border-radius: 20px;\" /></span>\n" +
+                    "                    </div>\n" +
+                    "                    <div class=\"qa-content\">\n" +
+                    "                        <h2 class=\"qa-header\">\n" +
+                    "                            <span href=\"#\" class=\"name\">" + data.name + "</span>\n" +
+                    "                            <span class=\"qa-tit\">" + data.note + "</span>\n" +
+                    "                        </h2>\n" +
+                    "                        <div class=\"qa-footer\">\n" +
+                    "                            <span><em>"+data.date+"</em></span>\n" +
+                    "                        </div>\n" +
+                    "                    </div>\n" +
+                    "                </div>";
+                $('#noteContent').val('');
+                $('#note').prepend(htm);
+            }
+        });
+
+    }
+</script>
 </body>
 </html>

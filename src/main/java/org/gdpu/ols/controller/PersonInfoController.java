@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -43,26 +44,30 @@ public class PersonInfoController extends BaseController {
 
         ResponseBean responseBean=new ResponseBean();
         Teacher teacher=new Teacher();
+        Student student=null;
         if (session.getAttribute(session.getId()) != null){
-            Student student= (Student) session.getAttribute(session.getId());
-            teacher.setTeacherName(student.getStudentName());
-            teacher.setTeacherSex(student.getStudentSex());
-            teacher.setTeacherPassword(student.getStudentPassword());
-            teacher.setTeacherEmail(student.getStudentEmail());
-        }else{
+            student= (Student) session.getAttribute(session.getId());
+
+        }else {
+
             responseBean.setResultCode(ERROR_CODE);
             responseBean.setResultMessage("登录过期");
-
             return responseBean;
         }
 
+        teacher.setPhotoStorageLocation(student.getPhotoStorageLocation());
         teacher.setRealName(teacherCustom.getRealName());
         teacher.setUniversity(teacherCustom.getUniversity());
         teacher.setDegree(teacherCustom.getDegree());
         teacher.setSelfIntroduction(teacherCustom.getSelfIntroduction());
 
         try {
-            this.teacherService.save(teacher);
+            this.teacherService.addSingleTeacher(teacher);
+
+            student.setStatus("T");
+            student.setTeacherId(teacher.getId());
+            this.studentService.update(student);
+
             responseBean.setResultCode(SUCCESS_CODE);
             responseBean.setResultMessage("申请讲师信息已提交，正在审核...");
         }catch (Exception e){
@@ -74,8 +79,16 @@ public class PersonInfoController extends BaseController {
     }
 
     @RequestMapping(value = "/baseMessage", method = RequestMethod.GET)
-    public String info() {
-        return "personInfo";
+    public ModelAndView info(HttpSession session) {
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("personInfo");
+        String studentStatus=null;
+        if (session.getAttribute(session.getId()) != null) {
+            Student student = (Student) session.getAttribute(session.getId());
+            studentStatus=student.getStatus();
+        }
+        modelAndView.addObject("status",studentStatus);
+        return modelAndView;
     }
 
     @PostMapping(value = "/getInfo")

@@ -7,4 +7,5 @@ import java.util.List;
 public interface TeacherMapper extends org.gdpu.ols.core.Mapper<Teacher> {
     int addTeacherBatch(List<Teacher> list);
     Teacher authenticTeacher(String teacherNameOrEmail);
+    int addSingleTeacher(Teacher teacher);
 }

@@ -20,7 +20,7 @@ public class CoursewareServiceImpl extends AbstractService<Courseware> implement
     @Override
     public Courseware addSingleCourseware(String coursewareName, String coursewareIntroduction,
                                           String coursewareTip,String coursewareStatus, Integer author,
-                                          String courseType,String coursewarePhotoLocation) {
+                                          String courseType,String coursewarePhotoLocation,String courseContent) {
         Courseware courseware=new Courseware();
         courseware.setCoursewarePublishDate(new Date());
         courseware.setCoursewareName(coursewareName);
@@ -30,6 +30,7 @@ public class CoursewareServiceImpl extends AbstractService<Courseware> implement
         courseware.setAuthor(author);
         courseware.setCoursewareType(Integer.parseInt(courseType));
         courseware.setCoursewarePhotoLocation(coursewarePhotoLocation);
+        courseware.setCoursewareContent(courseContent);
 
         this.coursewareMapper.addSingleCourseware(courseware);
         return courseware;
