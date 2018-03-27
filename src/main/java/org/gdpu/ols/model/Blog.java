@@ -10,6 +10,7 @@ public class Blog extends BaseBean{
     @Id
     private Integer id;
     private Integer user;
+    private String authorName;
     private String blogTitle;
     private String blogContent;
     private Date blogDate;
@@ -54,5 +55,13 @@ public class Blog extends BaseBean{
 
     public void setBlogDate(Date blogDate) {
         this.blogDate = blogDate;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 }

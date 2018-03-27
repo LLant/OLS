@@ -8,10 +8,12 @@ import org.gdpu.ols.model.Student;
 import org.gdpu.ols.model.Teacher;
 import org.gdpu.ols.service.StudentService;
 import org.gdpu.ols.service.TeacherService;
+import org.gdpu.ols.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,7 +58,7 @@ public class PersonInfoController extends BaseController {
         }
 
         teacher.setPhotoStorageLocation(student.getPhotoStorageLocation());
-        teacher.setRealName(teacherCustom.getRealName());
+        teacher.setRealName(teacherCustom.getRealName()+"老师");
         teacher.setUniversity(teacherCustom.getUniversity());
         teacher.setDegree(teacherCustom.getDegree());
         teacher.setSelfIntroduction(teacherCustom.getSelfIntroduction());
@@ -83,11 +85,17 @@ public class PersonInfoController extends BaseController {
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.setViewName("personInfo");
         String studentStatus=null;
+        Student student=null;
         if (session.getAttribute(session.getId()) != null) {
-            Student student = (Student) session.getAttribute(session.getId());
+            student = (Student) session.getAttribute(session.getId());
             studentStatus=student.getStatus();
         }
         modelAndView.addObject("status",studentStatus);
+        if (StringUtils.isEmpty(student.getLearningTime())){
+            modelAndView.addObject("learningTime","0h");
+        }else {
+            modelAndView.addObject("learningTime", TimeUtil.getHour(student.getLearningTime()));
+        }
         return modelAndView;
     }
 

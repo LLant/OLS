@@ -30,4 +30,8 @@
             ,#{item.author},#{item.mainFile},#{item.courseware})
         </foreach>
     </insert>
+
+    <delete id="deleteByCourseware" parameterType="java.lang.Integer">
+        DELETE FROM file WHERE courseware=#{courseware}
+    </delete>
 </mapper>

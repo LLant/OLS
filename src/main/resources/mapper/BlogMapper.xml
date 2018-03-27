@@ -8,6 +8,7 @@
     <resultMap id="blog" type="org.gdpu.ols.model.Blog">
         <result column="id" property="id"/>
         <result column="user" property="user"/>
+        <result column="author_name" property="authorName"/>
         <result column="blog_title" property="blogTitle"/>
         <result column="blog_content" property="blogContent"/>
         <result column="blog_date" property="blogDate"/>

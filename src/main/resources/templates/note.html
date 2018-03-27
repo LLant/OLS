@@ -1,0 +1,139 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+    .qa-content {
+        margin-top: 5px;
+        padding-right: 20px;
+        min-height: 85px;
+        position: relative;
+        overflow: hidden;
+    }
+    .qa-header .name {
+        display: block;
+        max-width: 100%;
+        color: #93999f;
+        font-size: 14px;
+        line-height: 14px;
+        padding-bottom: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .mod-qa-list .qa-header{
+        margin-top: 5px;
+    }
+    .mod-qa-list .qa-header .qa-tit {
+        font-size: 18px;
+        font-weight: 700;
+        color: #14191e;
+        line-height: 24px;
+    }
+    .qa-header .name, .mod-qa-list .qa-header .qa-tit {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    .replycont {
+        margin-top: 10px;
+        position: relative;
+    }
+    .mod-qa-list .qa-content .qa-footer {
+        margin-top: 12px;
+        color: #93999f;
+        font-size: 12px;
+    }
+</style>
+<div class="mod-qa-list" id="noteList">
+    <!--<div class="qa-content">
+        <h2 class="qa-header">
+            <span href="#" class="name">hi163hello</span>
+            <span class="qa-tit">源码在哪里</span>
+        </h2>
+        <div class="qa-footer">
+            <span><em>2017-12-13</em></span>
+        </div>
+        <hr>
+    </div>-->
+</div>
+<div class="row content">
+    <div id="paginator" style="text-align: center;cursor:pointer;"><ul id="pageLimit"></ul></div>
+</div>
+<script>
+    loadCoursewareInfo(1,10);
+    var pagecount;
+    var pageNum;
+    function loadCoursewareInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/note/getPersonalNote',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showCoursewareInfo(data);
+            }
+        });
+    }
+    function loadPaginator() {
+        $('#pageLimit').bootstrapPaginator({
+            currentPage: pageNum,
+            totalPages: pagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadCoursewareInfo(page,10);
+            }
+        });
+    }
+    function showCoursewareInfo(data) {
+        var data = data.data;
+        pagecount = data.pages;
+        pageNum = data.pageNum;
+        var noteList=data.list;
+        var htm='';
+        $('#noteList').html('');
+        $.each(noteList,function (id,note) {
+           console.log(id);
+            htm+="<div class=\"qa-content\">\n" +
+                "        <h2 class=\"qa-header\">\n" +
+                "            <span href=\"#\" class=\"name\">"+note.coursewareName+"</span>\n" +
+                "            <span class=\"qa-tit\">"+note.noteContent+"</span>\n" +
+                "        </h2>\n" +
+                "        <div class=\"qa-footer\">\n" +
+                "            <span><em>"+getDate(note.noteDate)+"</em></span>\n" +
+                "        </div>\n" +
+                "        <hr>\n" +
+                "    </div>";
+        });
+        $('#noteList').append(htm);
+        loadPaginator();
+    }
+    function getDate(tm){
+        var date = new Date(tm);
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        if(month >= 1 && month <= 9){
+            month = "0" + month;
+        }
+        if(day >= 1 && day <= 9){
+            day = "0" + day;
+        }
+        var needdate = year+'-'+month+'-'+day;
+        return needdate;
+    }
+</script>
+</html>

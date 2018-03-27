@@ -18,6 +18,7 @@ public class Student extends BaseBean {
     private String photoStorageLocation;         //图片存储位置
     private String status;
     private Integer teacherId;
+    private String learningTime;
 
     public Student(){}
 
@@ -83,6 +84,14 @@ public class Student extends BaseBean {
 
     public void setTeacherId(Integer teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public String getLearningTime() {
+        return learningTime;
+    }
+
+    public void setLearningTime(String learningTime) {
+        this.learningTime = learningTime;
     }
 
     @Override

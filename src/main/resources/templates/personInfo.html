@@ -9,6 +9,7 @@
     <link href="/css/personInfo.css" rel="stylesheet"/>
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-paginator.js"></script>
 </head>
 <body>
 <div class="bg-other">
@@ -27,16 +28,16 @@
         <div class="study-info">
             <div class="item follow">
                 <div>
-                    <em>235h</em>
+                    <em th:text="${learningTime}"></em>
                     <span>学习时长</span>
                 </div>
             </div>
-            <div class="item follow" id="star">
+            <!--<div class="item follow" id="star">
                 <div>
                     <em>1</em>
                     <span>关注</span>
                 </div>
-            </div>
+            </div>-->
             <div class="item follow" th:if="${status=='T'}">
                 <div>
                     <em>10</em>
@@ -58,18 +59,20 @@
             <div class="text-center" id="left-content">
                 <div class="list-group">
                     <ul style="list-style-type:none;">
-                        <li><a href="#" class="list-group-item active">修改信息</a> </li>
+                        <li><a href="#" class="list-group-item active">未读消息</a> </li>
+                        <li><a href="#" class="list-group-item">修改信息</a> </li>
                         <li><a href="#" class="list-group-item">我的笔记</a> </li>
-                        <li><a href="#" class="list-group-item">我的分享</a> </li>
+                        <li><a href="#" class="list-group-item">我的文章</a> </li>
                         <li th:if="${status=='T'}"><a href="#" class="list-group-item">发布课程</a> </li>
                         <li th:if="${status=='T'}"><a href="#" class="list-group-item">已发布课程</a> </li>
+                        <li th:if="${status=='T'}"><a href="#" class="list-group-item">未读评论</a> </li>
                     </ul>
                 </div>
             </div>
         </div>
 
         <div class="col-md-9 col-xs-8" id="right">
-                <div id="section-0">
+                <div id="section-1" hidden="hidden">
                     <div class="form-group form-inline">
                         <label for="newPassword">新密码</label>
                         <input type="text" class="form-control" id="newPassword" placeholder="********">
@@ -85,20 +88,29 @@
                     <button class="btn btn-primary" onclick="updateInfo();">提交</button>
                     <button class="btn btn-warning">取消</button>
                 </div>
-                <div id="section-1" hidden="hidden">
-
+                <div id="section-0">
+                    <div th:include="selfMessage"></div>
                 </div>
                 <div id="section-2" hidden="hidden">
-
+                    <div th:include="note"></div>
                 </div>
                 <div id="section-3" hidden="hidden">
-                    <div th:include="updateCourseware"></div>
+                    <div th:include="selfBlog"></div>
                 </div>
                 <div id="section-4" hidden="hidden">
-                    <div th:include="apply"></div>
+                    <div th:include="updateCourseware"></div>
                 </div>
                 <div id="section-5" hidden="hidden">
-                    <div th:include="starTeacher"></div>
+                    <div th:include="apply"></div>
+                </div>
+                <div id="section-6" hidden="hidden">
+                    <!--<div th:include="starTeacher"></div>-->
+                </div>
+                <div id="section-7" hidden="hidden">
+                    <div th:include="selfCourseware"></div>
+                </div>
+                <div id="section-8" hidden="hidden">
+                    <div th:include="selfComment"></div>
                 </div>
         </div>
     </div>
@@ -123,12 +135,12 @@
             });
         });
         $('#star').click(function () {
-            $('#section-5').parent().children().hide();
-            $('#section-5').show();
+            $('#section-6').parent().children().hide();
+            $('#section-6').show();
         });
         $('#apply_teacher').click(function () {
-            $('#section-4').parent().children().hide();
-            $('#section-4').show();
+            $('#section-5').parent().children().hide();
+            $('#section-5').show();
         });
         $('.list-group ul a').click(function(){
             $('.list-group ul a').removeClass('active');
@@ -148,17 +160,25 @@
                     $('#section-2').parent().children().hide();
                     $('#section-2').show();
                 };break;
-                case 2:{
-                    $('#section-2').parent().children().hide();
-                    $('#section-2').show();
-                };break;
                 case 3:{
                     $('#section-3').parent().children().hide();
                     $('#section-3').show();
                 };break;
+                case 4:{
+                    $('#section-4').parent().children().hide();
+                    $('#section-4').show();
+                };break;
+                case 5:{
+                    $('#section-7').parent().children().hide();
+                    $('#section-7').show();
+                };break;
+                case 6:{
+                    $('#section-8').parent().children().hide();
+                    $('#section-8').show();
+                };break;
                 default:{
-                    $('#section-1').parent().children().hide();
-                    $('#section-1').show();
+                    $('#section-0').parent().children().hide();
+                    $('#section-0').show();
                 };
             }
         });

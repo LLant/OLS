@@ -3,15 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace必须指向Dao接口 -->
-<mapper namespace="org.gdpu.ols.mapper.CommentMapper">
+<mapper namespace="org.gdpu.ols.mapper.ViewCommentMapper">
     <cache eviction="LRU" flushInterval="60000" readOnly="true"/>
-    <resultMap id="comment" type="org.gdpu.ols.model.Comment">
+    <resultMap id="viewComment" type="org.gdpu.ols.model.ViewComment">
         <id column="id" property="id"></id>
-        <result column="courseware_id" property="coursewareId"></result>
         <result column="comment_content" property="commentContent"/>
+        <result column="student_name" property="studentName"/>
         <result column="comment_date" property="commentDate"/>
-        <result column="comment_author" property="commentauthor"/>
-        <result column="star" property="star"/>
+        <result column="courseware_name" property="coursewareName"/>
+        <result column="courseware_id" property="coursewareId"/>
+        <result column="photo_storage_location" property="photoStorageLocation"/>
         <result column="reply_content" property="replyContent"/>
         <result column="is_read" property="read"/>
     </resultMap>

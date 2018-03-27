@@ -10,4 +10,8 @@
         <result column="student" property="student"/>
         <result column="teacher" property="teacher"/>
     </resultMap>
+
+    <delete id="disFollow" parameterType="java.lang.Integer">
+        DELETE FROM role_relationship WHERE student=#{student} AND teacher=#{teacher}
+    </delete>
 </mapper>

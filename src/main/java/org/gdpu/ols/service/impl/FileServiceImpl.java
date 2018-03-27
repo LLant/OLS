@@ -16,4 +16,8 @@ public class FileServiceImpl extends AbstractService<File> implements FileServic
     @Resource
     private FileMapper fileMapper;
 
+    @Override
+    public Integer deleteByCourseware(Integer coursewareId) {
+        return this.fileMapper.deleteByCourseware(coursewareId);
+    }
 }

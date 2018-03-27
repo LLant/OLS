@@ -1,7 +1,11 @@
 package org.gdpu.ols.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.gdpu.ols.bean.CourseBean;
+import org.gdpu.ols.bean.MyPageRequest;
 import org.gdpu.ols.common.BaseController;
+import org.gdpu.ols.common.ResponseBean;
 import org.gdpu.ols.model.Courseware;
 import org.gdpu.ols.model.File;
 import org.gdpu.ols.model.Student;
@@ -10,10 +14,7 @@ import org.gdpu.ols.service.CoursewareService;
 import org.gdpu.ols.service.FileService;
 import org.gdpu.ols.service.TeacherService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import tk.mybatis.mapper.entity.Condition;
 import javax.annotation.Resource;
@@ -25,6 +26,9 @@ import java.util.List;
 @RequestMapping(value = "/OLS/course",method = RequestMethod.GET)
 public class CoursewareController extends BaseController{
 
+    private static final String ERROR_CODE="9999";
+    private static final String SUCCESS_CODE="8888";
+
     @Resource
     private CoursewareService coursewareService;
     @Resource
@@ -35,6 +39,49 @@ public class CoursewareController extends BaseController{
     @GetMapping("/")
     public String course(){
         return "course";
+    }
+
+    @ResponseBody
+    @PostMapping("/deleteCourse")
+    public ResponseBean deleteCourse(@RequestBody Courseware courseware){
+
+        ResponseBean responseBean=new ResponseBean();
+        try {
+            this.fileService.deleteByCourseware(courseware.getId());
+            this.coursewareService.deleteById(courseware.getId());
+            responseBean.setResultCode(SUCCESS_CODE);
+        }catch (Exception e){
+            responseBean.setResultCode(ERROR_CODE);
+        }finally {
+            return responseBean;
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/getSelfCourse")
+    public ResponseBean getCourse(@RequestBody MyPageRequest myPageRequest,HttpSession session){
+        PageHelper.startPage(Integer.parseInt(myPageRequest.getOffset()),
+                Integer.parseInt(myPageRequest.getLimit()));
+        ResponseBean responseBean=new ResponseBean();
+        Student student=null;
+        if (session.getAttribute(session.getId())!=null){
+            student= (Student) session.getAttribute(session.getId());
+            if (student.getTeacherId()==null){
+                responseBean.setResultCode(ERROR_CODE);
+                return responseBean;
+            }
+        }
+        Condition condition=new Condition(Courseware.class);
+        condition.createCriteria().andCondition("author="+student.getTeacherId());
+        condition.setOrderByClause("courseware_publish_date desc");
+        List<Courseware> list=null;
+        list=this.coursewareService.findByCondition(condition);
+
+        PageInfo pageInfo=new PageInfo(list);
+
+        responseBean.setResultCode(SUCCESS_CODE);
+        responseBean.setData(pageInfo);
+        return responseBean;
     }
 
     @GetMapping("/{id:\\d{1,11}}")

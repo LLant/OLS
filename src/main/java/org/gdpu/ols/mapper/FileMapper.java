@@ -7,4 +7,6 @@ import java.util.List;
 public interface FileMapper extends org.gdpu.ols.core.Mapper<File> {
 
     Integer addFileBatch(List<File> fileList);
+
+    Integer deleteByCourseware(Integer coursewareId);
 }

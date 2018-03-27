@@ -1,0 +1,127 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>博文</th>
+            <th>发布时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="blogTable">
+            <tr>
+                <th></th>
+                <th></th>
+                <th><button class="btn btn-info">查看</button>&nbsp;&nbsp;<button class="btn btn-warning"></button></th>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row content">
+        <div id="blogPaginator" style="text-align: center;cursor:pointer;"><ul id="blogPageLimit"></ul></div>
+    </div>
+
+</div>
+<script>
+    loadSelfBlogInfo(1,10);
+    var selfBlogPagecount;
+    var selfBlogPageNum;
+    function loadSelfBlogInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/blog/getSelfBlog',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showSelfBlogInfo(data);
+            }
+        });
+    }
+    function loadSelfBlogPaginator() {
+        $('#blogPageLimit').bootstrapPaginator({
+            currentPage: selfBlogPageNum,
+            totalPages: selfBlogPagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadSelfBlogInfo(page,10);
+            }
+        });
+    }
+    function showSelfBlogInfo(data) {
+        var data = data.data;
+        selfBlogPagecount = data.pages;
+        selfBlogPageNum = data.pageNum;
+        var selfBlogList=data.list;
+        var htm='';
+        $('#blogTable').html('');
+        $.each(selfBlogList,function (id,blog) {
+            htm+="<tr>\n" +
+                "                <th style=\"width: 545px;\">"+blog.blogTitle+"</th>\n" +
+                "                <th style=\"width: 237px;\">"+formateDate(blog.blogDate)+"</th>\n" +
+                "                <th><button type='button' class=\"btn btn-info\" " +
+                " onclick=\"showBlogDetail("+blog.id+")\">查看</button>&nbsp;&nbsp;<button class=\"btn btn-danger\" onclick=\"deleteBlog("+blog.id+")\">删除</button></th>\n" +
+                "            </tr>";
+            htm+="<tr id=\""+blog.id+"\" hidden=true><th colspan=\"3\" style=\"font-size: 18px;\">"+blog.blogContent+"</th></tr>";
+        });
+        $('#blogTable').append(htm);
+        loadSelfBlogPaginator();
+    }
+    function formateDate(fm) {
+        var date = new Date(fm);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+
+        if (month >= 1 && month <= 9) {
+            month = '0' + month;
+        }
+        if (day >= 1 && day <= 9) {
+            day = '0' + day;
+        }
+        if (hour >= 0 && hour <= 9) {
+            hour = '0' + hour;
+        }
+        if (minute >= 0 && minute <= 9) {
+            minute = '0' + minute;
+        }
+        if (second >= 0 && second <= 9) {
+            second = '0' + second;
+        }
+        return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+    }
+    function deleteBlog(id) {
+        $.ajax({
+            type:'POST',
+            url:'http://localhost:8080/OLS/blog/deleteSingle',
+            data:JSON.stringify({id:id}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                loadSelfBlogInfo(1,10);
+            }
+        });
+    }
+    function showBlogDetail(id) {
+        $('#'+id).prop('hidden',!$('#'+id).attr('hidden'));
+    }
+</script>
+</html>

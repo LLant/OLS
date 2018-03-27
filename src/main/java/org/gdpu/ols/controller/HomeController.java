@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,8 +49,23 @@ public class HomeController extends BaseController {
     @GetMapping("/loginOut")
     @ResponseBody
     public String loginOut(HttpSession session){            //必须有返回类型，否则themeleaf会报错
-        if(session.getAttribute(session.getId())!=null)
+        Date nowTime=new Date();
+        Date loginTime=null;
+        Student student=null;
+        Long learningTime=null;
+        if(session.getAttribute(session.getId())!=null){
+            loginTime= (Date) session.getAttribute(session.getId()+"learningTime");
+            learningTime=nowTime.getTime()-loginTime.getTime();
+            student= (Student) session.getAttribute(session.getId());
+            if(StringUtils.isEmpty(student.getLearningTime())){
+                student.setLearningTime(String.valueOf(learningTime));
+            }else {
+                learningTime+=Long.parseLong(student.getLearningTime());
+                student.setLearningTime(String.valueOf(learningTime));
+            }
             session.removeAttribute(session.getId());
+        }
+        this.studentService.update(student);
         //session.getAttribute(session.getId())         session中不存在此属性会报错
         return SUCCESS_CODE;
     }
@@ -141,6 +158,7 @@ public class HomeController extends BaseController {
                         responseBean.setResultMessage("学生用户登录成功");
                         responseBean.setData(student);
                         session.setAttribute(session.getId(),student);
+                        session.setAttribute(session.getId()+"learningTime",new Date());
                         session.setMaxInactiveInterval(60*30);
                     }else {
                         responseBean.setResultCode(ERROR_CODE);

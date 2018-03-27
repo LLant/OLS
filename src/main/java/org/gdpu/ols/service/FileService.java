@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface FileService extends Service<File> {
-
+    Integer deleteByCourseware(Integer coursewareId);
 }

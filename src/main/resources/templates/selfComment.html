@@ -1,0 +1,144 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<script type="text/javascript" src="/js/bootstrap-paginator.js"></script>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>博文</th>
+            <th>评论</th>
+            <th>评论时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="commentTable">
+            <tr>
+                <th></th>
+                <th></th>
+                <th><button class="btn btn-info">回复</button>&nbsp;&nbsp;<button class="btn btn-warning"></button>忽视</th>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row content">
+        <div id="commentPaginator" style="text-align: center;cursor:pointer;"><ul id="commentPageLimit"></ul></div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="commentModalLabel">回复内容:</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <!--<label for="message-text" class="control-label">回复内容:</label>-->
+                        <textarea class="form-control" id="commentReply" style="height: 200px;"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submitReply()">回复</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    loadCommentInfo(1,10);
+    var commentPagecount;
+    var commentPageNum;
+    function loadCommentInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/comment/getUnreadComment',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showcommentInfo(data);
+            }
+        });
+    }
+    function loadcommentPaginator() {
+        $('#commentPageLimit').bootstrapPaginator({
+            currentPage: commentPageNum,
+            totalPages: commentPagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadCommentInfo(page,10);
+            }
+        });
+    }
+    function showcommentInfo(data) {
+        var data = data.data;
+        commentPagecount = data.pages;
+        commentPageNum = data.pageNum;
+        var commentList=data.list;
+        var htm='';
+        $('#commentTable').html('');
+        $.each(commentList,function (id,comment) {
+            htm+="<tr>\n" +
+                "                <th>"+comment.coursewareName+"</th>\n" +
+                "                <th>"+comment.commentContent+"</th>\n" +
+                "                <th>"+formateDate(comment.commentDate)+"</th>\n" +
+                "                <th><button type='button' class=\"btn btn-info\" " +
+                " data-toggle=\"modal\" data-target=\"#commentModal\" onclick=\"setId("+comment.id+")\">回复</button>&nbsp;&nbsp;" +
+                "<button class=\"btn btn-warning\" onclick=\"ignore("+comment.id+")\">忽视</button></th>\n" +
+                "            </tr>";
+        });
+        $('#commentTable').append(htm);
+        loadcommentPaginator();
+    }
+    var replyCommentId;
+    function setId(id) {
+        replyCommentId=id;
+        console.log("replyCommentId"+replyCommentId);
+    }
+    
+    function submitReply() {
+        $.ajax({
+            type:'POST',
+            url:'http://localhost:8080/OLS/comment/reply',
+            data:JSON.stringify({id:replyCommentId,replyContent:' [老师的回复] '+$('#commentReply').val()}),
+            contentType:'application/json;charset=UTF-8',
+            success:function(data) {
+                $('#commentReply').val('');
+                loadCommentInfo(1,10);
+            }
+        });
+    }
+    
+    function ignore(id) {
+        $.ajax({
+            type:'POST',
+            url:'http://localhost:8080/OLS/comment/ignore',
+            data:JSON.stringify({id:id}),
+            contentType:'application/json;charset=UTF-8',
+            success:function(data) {
+                loadCommentInfo(1,10);
+            }
+        });
+
+    }
+</script>
+</html>

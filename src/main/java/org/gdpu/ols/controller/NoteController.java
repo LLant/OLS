@@ -7,7 +7,9 @@ import org.gdpu.ols.common.BaseController;
 import org.gdpu.ols.common.ResponseBean;
 import org.gdpu.ols.model.Note;
 import org.gdpu.ols.model.Student;
+import org.gdpu.ols.model.ViewNote;
 import org.gdpu.ols.service.NoteService;
+import org.gdpu.ols.service.ViewNoteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,30 +32,13 @@ public class NoteController extends BaseController{
 
     @Resource
     private NoteService noteService;
+    @Resource
+    private ViewNoteService viewNoteService;
 
     @ResponseBody
     @PostMapping(value = "/getNote")
     public ResponseBean getNote(@RequestBody(required = false) MyPageRequest myPageRequest){
-
-        PageHelper.startPage(Integer.parseInt(myPageRequest.getOffset()),
-                Integer.parseInt(myPageRequest.getLimit()));
-
-        List<Note> noteList=null;
-        String coursewareId=null;
-        if(!StringUtils.isEmpty(myPageRequest.getCondition()))
-            coursewareId=myPageRequest.getCondition();
-
-        Condition condition=new Condition(Note.class);
-        condition.createCriteria().andCondition("courseware_id="+coursewareId);
-        condition.setOrderByClause("note_data");
-        noteList=this.noteService.findByCondition(condition);
-
-        PageInfo pageInfo=new PageInfo(noteList);
-        ResponseBean responseBean=new ResponseBean();
-        responseBean.setResultCode(SUCCESS_CODE);
-        responseBean.setData(pageInfo);
-
-        return responseBean;
+        return this.pageQuery(myPageRequest,"courseware_id",myPageRequest.getCondition());
     }
 
     @ResponseBody
@@ -86,4 +71,29 @@ public class NoteController extends BaseController{
         return map;
     }
 
+
+    @ResponseBody
+    @PostMapping("/getPersonalNote")
+    public ResponseBean getPersonNote(@RequestBody(required = false) MyPageRequest myPageRequest,
+                                      HttpSession session){
+
+        Student student= (Student) session.getAttribute(session.getId());
+        return this.pageQuery(myPageRequest,"user",student.getId().toString());
+    }
+
+    private ResponseBean pageQuery(MyPageRequest myPageRequest,String str,String value){
+        List<ViewNote> list=null;
+        PageHelper.startPage(Integer.parseInt(myPageRequest.getOffset()),
+                Integer.parseInt(myPageRequest.getLimit()));
+
+        Condition condition=new Condition(ViewNote.class);
+        condition.createCriteria().andCondition(str+"="+value);
+        condition.setOrderByClause("note_date desc");
+        list=this.viewNoteService.findByCondition(condition);
+
+        PageInfo pageInfo=new PageInfo(list);
+        ResponseBean responseBean=new ResponseBean();
+        responseBean.setData(pageInfo);
+        return responseBean;
+    }
 }

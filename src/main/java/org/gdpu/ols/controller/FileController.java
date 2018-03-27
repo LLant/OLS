@@ -5,12 +5,10 @@ import com.github.pagehelper.PageInfo;
 import org.gdpu.ols.bean.MyPageRequest;
 import org.gdpu.ols.common.BaseController;
 import org.gdpu.ols.common.ResponseBean;
-import org.gdpu.ols.model.Courseware;
-import org.gdpu.ols.model.File;
-import org.gdpu.ols.model.Student;
-import org.gdpu.ols.model.ViewCoursewareDetail;
+import org.gdpu.ols.model.*;
 import org.gdpu.ols.service.CoursewareService;
 import org.gdpu.ols.service.FileService;
+import org.gdpu.ols.service.MessageService;
 import org.gdpu.ols.service.ViewCoursewareDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +38,8 @@ public class FileController extends BaseController{
     private CoursewareService coursewareService;
     @Resource
     private ViewCoursewareDetailService viewCoursewareDetailService;
+    @Resource
+    private MessageService messageService;
 
 
     @PostMapping(value = "/add")
@@ -89,6 +89,9 @@ public class FileController extends BaseController{
         }
         responseBean.setResultCode(SUCCESS_CODE);
         responseBean.setResultMessage("文件上传成功");
+
+        this.setMessage(user.getId(),"您的课件已成功上传，正在等待管理员审核...");
+
         return responseBean;
     }
 
@@ -175,4 +178,12 @@ public class FileController extends BaseController{
         return responseBean;
     }
 
+    private void setMessage(Integer targetUser,String content){
+       Message message=new Message();
+       message.setContent(content);
+       message.setDate(new Date());
+       message.setIsRead("N");
+       message.setTargetUser(targetUser);
+       this.messageService.save(message);
+    }
 }

@@ -5,19 +5,18 @@ import org.gdpu.ols.common.BaseBean;
 import javax.persistence.Id;
 import java.util.Date;
 
-public class Comment extends BaseBean{
+public class ViewComment extends BaseBean{
 
     @Id
     private Integer id;
-    private Integer coursewareId;
     private String commentContent;
-    private Date commentDate;
-    private Integer commentAuthor;
-    private Long star;              //点赞次数
     private String replyContent;
+    private String studentName;
+    private Date commentDate;
+    private String coursewareName;
+    private Integer coursewareId;
+    private String photoStorageLocation;
     private String isRead;
-
-    public Comment(){}
 
     public Integer getId() {
         return id;
@@ -25,14 +24,6 @@ public class Comment extends BaseBean{
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getCoursewareId() {
-        return coursewareId;
-    }
-
-    public void setCoursewareId(Integer coursewareId) {
-        this.coursewareId = coursewareId;
     }
 
     public String getCommentContent() {
@@ -43,6 +34,14 @@ public class Comment extends BaseBean{
         this.commentContent = commentContent;
     }
 
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
     public Date getCommentDate() {
         return commentDate;
     }
@@ -51,20 +50,28 @@ public class Comment extends BaseBean{
         this.commentDate = commentDate;
     }
 
-    public Integer getCommentAuthor() {
-        return commentAuthor;
+    public String getCoursewareName() {
+        return coursewareName;
     }
 
-    public void setCommentAuthor(Integer commentAuthor) {
-        this.commentAuthor = commentAuthor;
+    public void setCoursewareName(String coursewareName) {
+        this.coursewareName = coursewareName;
     }
 
-    public Long getStar() {
-        return star;
+    public Integer getCoursewareId() {
+        return coursewareId;
     }
 
-    public void setStar(Long star) {
-        this.star = star;
+    public void setCoursewareId(Integer coursewareId) {
+        this.coursewareId = coursewareId;
+    }
+
+    public String getPhotoStorageLocation() {
+        return photoStorageLocation;
+    }
+
+    public void setPhotoStorageLocation(String photoStorageLocation) {
+        this.photoStorageLocation = photoStorageLocation;
     }
 
     public String getReplyContent() {

@@ -7,6 +7,7 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
     <script type="text/javascript" src="/js/video.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-paginator.js"></script>
     <link type="text/css" href="/css/bootstrap.css" rel="stylesheet"></link>
     <link type="text/css" href="/css/video.css" rel="stylesheet"></link>
 </head>
@@ -33,6 +34,7 @@
                 </ul>
             </div>
             <div id="comment">
+                <div id="comment-content">
                 <div class="mod-qa-list">
                     <div class="qa-medias">
                         <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40"
@@ -54,52 +56,29 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="mod-qa-list">
-                    <div class="qa-medias">
-                        <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40"
-                                   height="40" style="border-radius: 20px;"/></span>
-                    </div>
-                    <div class="qa-content">
-                        <h2 class="qa-header">
-                            <span href="#" class="name">hi163hello</span>
-                            <span class="qa-tit">源码在哪里</span>
-                        </h2>
-                        <div class="replycont">
-                            <div class="replydes">
-                                <span>[老师 小马哥的回答]</span>
-                                <span>暂时还没有公布源码，这块要与慕课沟通</span>
-                            </div>
-                        </div>
-                        <div class="qa-footer">
-                            <span><em>2017-12-13</em></span>
-                        </div>
-                    </div>
+                </div>
+                <div class="row content">
+                    <div id="commentPaginator" style="text-align: center;cursor:pointer;"><ul id="commentPageLimit"></ul></div>
+                </div>
+                <div>
+                        <textarea class="form-control" rows="3" placeholder="你的想法..."
+                                  style="resize: none;margin-top: 15px;margin-bottom:15px;" id="commentContent"></textarea>
+                    <button type="button" class="btn btn-primary" onclick="submitComment()">提交</button>
                 </div>
             </div>
-            <div id="note" hidden="true">
-                <div class="mod-qa-list">
-                    <div class="qa-medias">
-                        <span><img src="https://img3.mukewang.com/user/533e4cbd00011ecc01000100-40-40.jpg" width="40"
-                                   height="40" style="border-radius: 20px;"/></span>
-                    </div>
-                    <div class="qa-content">
-                        <h2 class="qa-header">
-                            <span href="#" class="name">hi163hello</span>
-                            <span class="qa-tit">源码在哪里</span>
-                        </h2>
-                        <div class="qa-footer">
-                            <span><em>2017-12-13</em></span>
-                        </div>
-                    </div>
+            <div  id="note" hidden="true">
+                <div id="note-content"></div>
+                <div class="row content">
+                    <div id="notePaginator" style="text-align: center;cursor:pointer;"><ul id="notePageLimit"></ul></div>
                 </div>
-            </div>
-
-            <div>
+                <div>
                 <textarea class="form-control" rows="3" placeholder="你的想法..."
                           style="resize: none;margin-top: 15px;margin-bottom:15px;" id="noteContent"></textarea>
-                <button type="button" class="btn btn-primary" onclick="submitNote()">提交</button>
+                    <button type="button" class="btn btn-primary" onclick="submitNote()">提交</button>
+                </div>
             </div>
+
+
         </div>
     </div>
     <div class="col-xs-12 col-md-4">
@@ -112,8 +91,8 @@
                 </a>
                 <span class="tit">
                 	<a href="#" target="_blank" th:text="${courseware.authorRealName}"></a>
-                	<button class="btn btn-primary" style="margin-left: 10px;outline: 0;" id="follow"
-                            th:value="${courseware.author}">关注</button>
+                	<!--<button class="btn btn-primary" style="margin-left: 10px;outline: 0;" id="follow"
+                            th:value="${courseware.author}">关注</button>-->
             		</span>
                 <span class="job" th:text="${courseware.authorDegree}"></span>
             </div>
@@ -134,14 +113,95 @@
 </div>
 <div id="footer" th:include="footer"></div>
 <script>
-//    $.ajax({
-//        url: 'http://localhost:8080/OLS/note/getNote',
-//        type: 'POST',
-//        success:function (data) {
-//
-//        }
-//    });
 
+
+    /* *************************************笔记************************************* */
+    loadNoteInfo(1,8);
+    var notePagecount;
+    var notePageNum;
+    function loadNoteInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/note/getNote',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit,condition:$('#courseContent').attr('value')}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showNoteInfo(data);
+            }
+        });
+    }
+    function loadNotePaginator() {
+        $('#notePageLimit').bootstrapPaginator({
+            currentPage: notePageNum,
+            totalPages: notePagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadNoteInfo(page,8);
+            }
+        });
+    }
+    function showNoteInfo(data) {
+        var data = data.data;
+        notePagecount = data.pages;
+        notePageNum = data.pageNum;
+        var noteList=data.list;
+        var htm='';
+        $('#note-content').html('');
+        $.each(noteList,function (id,note) {
+            console.log(id);
+            htm+="<div class=\"mod-qa-list\">\n" +
+                "                    <div class=\"qa-medias\">\n" +
+                "                        <span><img src=\""+note.photoStorageLocation+"\" width=\"40\"\n" +
+                "                                   height=\"40\" style=\"border-radius: 20px;\"/></span>\n" +
+                "                    </div>\n" +
+                "                    <div class=\"qa-content\">\n" +
+                "                        <h2 class=\"qa-header\">\n" +
+                "                            <span href=\"#\" class=\"name\">"+note.studentName+"</span>\n" +
+                "                            <span class=\"qa-tit\">"+note.noteContent+"</span>\n" +
+                "                        </h2>\n" +
+                "                        <div class=\"qa-footer\">\n" +
+                "                            <span><em>"+getDate(note.noteDate)+"</em></span>\n" +
+                "                        </div>\n" +
+                "                    </div>\n" +
+                "                </div>";
+        });
+        $('#note-content').append(htm);
+        loadNotePaginator();
+    }
+    /* ****************************************************************************** */
+    function getDate(tm){
+        var date = new Date(tm);
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        if(month >= 1 && month <= 9){
+            month = "0" + month;
+        }
+        if(day >= 1 && day <= 9){
+            day = "0" + day;
+        }
+        var needdate = year+'-'+month+'-'+day;
+        return needdate;
+    }
+    
     function submitNote() {
         var data = {noteContent: $('#noteContent').val(), coursewareId: $('#courseContent').attr('value')};
 
@@ -151,27 +211,105 @@
             type: 'POST',
             contentType: 'application/json;charset=UTF-8',
             success: function (data) {
-                var htm = '';
-                htm += "<div class=\"mod-qa-list\">\n" +
-                    "                    <div class=\"qa-medias\">\n" +
-                    "                        <span><img src=\"" + data.photoLocation + "\" width=\"40\" height=\"40\" style=\"border-radius: 20px;\" /></span>\n" +
-                    "                    </div>\n" +
-                    "                    <div class=\"qa-content\">\n" +
-                    "                        <h2 class=\"qa-header\">\n" +
-                    "                            <span href=\"#\" class=\"name\">" + data.name + "</span>\n" +
-                    "                            <span class=\"qa-tit\">" + data.note + "</span>\n" +
-                    "                        </h2>\n" +
-                    "                        <div class=\"qa-footer\">\n" +
-                    "                            <span><em>"+data.date+"</em></span>\n" +
-                    "                        </div>\n" +
-                    "                    </div>\n" +
-                    "                </div>";
                 $('#noteContent').val('');
-                $('#note').prepend(htm);
+                loadNoteInfo(1,8);
             }
         });
-
     }
+
+    function submitComment() {
+        var data = {commentContent: $('#commentContent').val(), coursewareId: $('#courseContent').attr('value')};
+
+        $.ajax({
+            url: 'http://localhost:8080/OLS/comment/add',
+            data: JSON.stringify(data),
+            type: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            success: function (data) {
+                $('#commentContent').val('');
+                loadCommentInfo(1,8);
+            }
+        });
+    }
+
+    /* *************************************评论************************************* */
+    loadCommentInfo(1,8);
+    var commentPagecount;
+    var commentPageNum;
+    function loadCommentInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/comment/getComment',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit,condition:$('#courseContent').attr('value')}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showCommentInfo(data);
+            }
+        });
+    }
+    function loadCommentPaginator() {
+        $('#commentPageLimit').bootstrapPaginator({
+            currentPage: commentPageNum,
+            totalPages: commentPagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadCommentInfo(page,8);
+            }
+        });
+    }
+    function showCommentInfo(data) {
+        var data = data.data;
+        commentPagecount = data.pages;
+        commentPageNum = data.pageNum;
+        var commentList=data.list;
+        var htm='';
+        $('#comment-content').html('');
+        $.each(commentList,function (id,comment) {
+            htm+="<div class=\"mod-qa-list\">\n" +
+                "                    <div class=\"qa-medias\">\n" +
+                "                        <span><img src=\""+comment.photoStorageLocation+"\" width=\"40\"\n" +
+                "                                   height=\"40\" style=\"border-radius: 20px;\"/></span>\n" +
+                "                    </div>\n" +
+                "                    <div class=\"qa-content\">\n" +
+                "                        <h2 class=\"qa-header\">\n" +
+                "                            <span href=\"#\" class=\"name\">"+comment.studentName+"</span>\n" +
+                "                            <span class=\"qa-tit\">"+comment.commentContent+"</span>\n" +
+                "                        </h2>\n";
+            if (comment.replyContent!=null){
+                htm+="<div class=\"replycont\">\n" +
+                    "                            <div class=\"replydes\">\n" +
+                    "                                <span>"+comment.replyContent+"</span>\n" +
+                    "                            </div>\n" +
+                    "                        </div>";
+            }
+            htm+="<div class=\"qa-footer\">\n" +
+                "                            <span><em>"+getDate(comment.commentDate)+"</em></span>\n" +
+                "                        </div>\n" +
+                "                    </div>\n" +
+                "                </div>";
+        });
+        $('#comment-content').append(htm);
+        loadCommentPaginator();
+    }
+    /* ****************************************************************************** */
 </script>
 </body>
 </html>

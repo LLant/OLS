@@ -1,0 +1,97 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>消息</th>
+            <th>时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="messageTable">
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row content">
+        <div id="messagePaginator" style="text-align: center;cursor:pointer;"><ul id="messagePageLimit"></ul></div>
+    </div>
+
+</div>
+<script>
+    loadSelfMessageInfo(1,10);
+    var selfMessagePagecount;
+    var selfMessagePageNum;
+    function loadSelfMessageInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/message/getMessage',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showSelfMessageInfo(data);
+            }
+        });
+    }
+    function loadSelfMessagePaginator() {
+        $('#messagePageLimit').bootstrapPaginator({
+            currentPage: selfMessagePageNum,
+            totalPages: selfMessagePagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadSelfMessageInfo(page,10);
+            }
+        });
+    }
+    function showSelfMessageInfo(data) {
+        var data = data.data;
+        selfMessagePagecount = data.pages;
+        selfMessagePageNum = data.pageNum;
+        var selfMessageList=data.list;
+        var htm='';
+        $('#messageTable').html('');
+        $.each(selfMessageList,function (id,message) {
+            htm+="<tr>\n" +
+                "                <th>"+message.content+"</th>\n" +
+                "                <th>"+formateDate(message.date)+"</th>\n" +
+                "                <th><button type='button' class=\"btn btn-info\" " +
+                " onclick=\"readMessage("+message.id+")\">已读</button></th>\n" +
+                "            </tr>";
+        });
+        $('#messageTable').append(htm);
+        loadSelfMessagePaginator();
+    }
+    function readMessage(id) {
+        $.ajax({
+            type:'POST',
+            url:'http://localhost:8080/OLS/message/read',
+            data:JSON.stringify({id:id}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                loadSelfMessageInfo(1,10);
+            }
+        });
+    }
+</script>
+</html>
