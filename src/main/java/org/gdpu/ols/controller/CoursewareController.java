@@ -6,20 +6,18 @@ import org.gdpu.ols.bean.CourseBean;
 import org.gdpu.ols.bean.MyPageRequest;
 import org.gdpu.ols.common.BaseController;
 import org.gdpu.ols.common.ResponseBean;
-import org.gdpu.ols.model.Courseware;
-import org.gdpu.ols.model.File;
-import org.gdpu.ols.model.Student;
-import org.gdpu.ols.model.Teacher;
-import org.gdpu.ols.service.CoursewareService;
-import org.gdpu.ols.service.FileService;
-import org.gdpu.ols.service.TeacherService;
+import org.gdpu.ols.model.*;
+import org.gdpu.ols.service.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import tk.mybatis.mapper.entity.Condition;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -28,6 +26,10 @@ public class CoursewareController extends BaseController{
 
     private static final String ERROR_CODE="9999";
     private static final String SUCCESS_CODE="8888";
+    private static final String APPROVESTR="您发布的课程已经通过审核！";
+    private static final String REJECTSTR="很遗憾您发布的课程未能通过审核!";
+    private static final String N="N";
+    private static final String APPROVE="通过审核";
 
     @Resource
     private CoursewareService coursewareService;
@@ -35,6 +37,10 @@ public class CoursewareController extends BaseController{
     private FileService fileService;
     @Resource
     private TeacherService teacherService;
+    @Resource
+    private StudentService studentService;
+    @Resource
+    private MessageService messageService;
 
     @GetMapping("/")
     public String course(){
@@ -55,6 +61,26 @@ public class CoursewareController extends BaseController{
         }finally {
             return responseBean;
         }
+    }
+
+    @ResponseBody
+    @PostMapping("/getAssessCourse")
+    public ResponseBean getAssessCourse(@RequestBody MyPageRequest myPageRequest){
+
+        PageHelper.startPage(Integer.parseInt(myPageRequest.getOffset()),
+                Integer.parseInt(myPageRequest.getLimit()));
+        ResponseBean responseBean=new ResponseBean();
+        Condition condition=new Condition(Courseware.class);
+        condition.createCriteria().andCondition("courseware_status='审核中'");
+        condition.setOrderByClause("courseware_publish_date desc");
+        List<Courseware> list=null;
+        list=this.coursewareService.findByCondition(condition);
+
+        PageInfo pageInfo=new PageInfo(list);
+
+        responseBean.setResultCode(SUCCESS_CODE);
+        responseBean.setData(pageInfo);
+        return responseBean;
     }
 
     @ResponseBody
@@ -134,5 +160,59 @@ public class CoursewareController extends BaseController{
             }
         }
         return stringList;
+    }
+
+    @Transactional
+    @ResponseBody
+    @GetMapping("/approve/{courseId:\\d{1,11}}/{author:\\d{1,11}}")
+    public String approve(@PathVariable int courseId,@PathVariable int author,HttpSession session){
+
+        int targetUser=this.getStudentId(author);
+        if (targetUser==-1){
+            return ERROR;
+        }
+
+        Message message=new Message();
+        message.setTargetUser(targetUser);
+        message.setContent(APPROVESTR);
+        message.setIsRead(N);
+        message.setDate(new Date());
+
+        Admin admin= (Admin) session.getAttribute("admin"+session.getId());
+
+        this.coursewareService.updateCourseware(APPROVE,courseId,admin.getId());
+        this.messageService.save(message);
+        return SUCCESS;
+    }
+
+    @Transactional
+    @ResponseBody
+    @GetMapping("/reject/{courseId:\\d{1,11}}/{author:\\d{1,11}}")
+    public String reject(@PathVariable int courseId,@PathVariable int author){
+        int targetUser=this.getStudentId(author);
+        if (targetUser==-1){
+            return ERROR;
+        }
+
+        Message message=new Message();
+        message.setTargetUser(targetUser);
+        message.setContent(REJECTSTR);
+        message.setIsRead(N);
+        message.setDate(new Date());
+
+        this.coursewareService.deleteById(courseId);
+        this.messageService.save(message);
+
+        return SUCCESS;
+    }
+
+    private int getStudentId(int author){
+        Condition condition=new Condition(Student.class);
+        condition.createCriteria().andCondition("teacher_id="+author);
+        List<Student> studentList=this.studentService.findByCondition(condition);
+        if(!CollectionUtils.isEmpty(studentList)){
+            return studentList.get(0).getId();
+        }
+        return -1;
     }
 }

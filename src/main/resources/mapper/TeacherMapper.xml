@@ -12,6 +12,8 @@
         <result column="university" property="university"/>
         <result column="self_introduction" property="selfIntroduction"/>
         <result column="photo_storage_location" property="photoStorageLocation"/>
+        <result column="recommend" property="recommend"/>
+        <result column="identity_status" property="identityStatus"/>
     </resultMap>
 
     <sql id="teacherColumn">
@@ -40,8 +42,14 @@
     <insert id="addSingleTeacher" parameterType="org.gdpu.ols.model.Teacher" useGeneratedKeys="true" keyProperty="id">
 
         insert into teacher(degree,university,real_name,self_introduction,
-        photo_storage_location)
+        photo_storage_location,identity_status)
         values(#{degree}, #{university},#{realName},
-        #{selfIntroduction},#{photoStorageLocation})
+        #{selfIntroduction},#{photoStorageLocation},#{identityStatus})
     </insert>
+
+    <update id="updateTeacher">
+        UPDATE teacher
+        SET identity_status=#{status}
+        WHERE id=#{id}
+    </update>
 </mapper>

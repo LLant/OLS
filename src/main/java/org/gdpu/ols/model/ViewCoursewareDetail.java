@@ -19,6 +19,7 @@ public class ViewCoursewareDetail extends BaseBean{
     private String coursewareTip;
     private String aspect;
     private String category;
+    private String recommend;
 
     public Integer getId() {
         return id;
@@ -106,6 +107,14 @@ public class ViewCoursewareDetail extends BaseBean{
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(String recommend) {
+        this.recommend = recommend;
     }
 
     @Override

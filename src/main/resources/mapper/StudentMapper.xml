@@ -35,10 +35,10 @@
             SELECT
             LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO student(student_name,student_sex,student_email,student_password,status)
+        INSERT INTO student(student_name,student_sex,student_email,student_password,status,photo_storage_location)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.studentName},#{item.studentSex},#{item.studentEmail},#{item.studentPassword},#{item.status})
+            (#{item.studentName},#{item.studentSex},#{item.studentEmail},#{item.studentPassword},#{item.status},#{item.photoStorageLocation})
         </foreach>
     </insert>
     <!--批更新学生信息-->
@@ -64,4 +64,10 @@
     <select id="selectStudentByEmail" parameterType="java.lang.String" resultMap="student">
         SELECT id,student_name,student_sex,student_email,student_password,status,teacher_id,learning_time FROM student WHERE student_email=#{studentEmail}
     </select>
+
+    <update id="updateStudentStatus">
+        UPDATE student
+        SET status=#{status},teacher_id=#{teacherId}
+        WHERE id=#{id}
+    </update>
 </mapper>

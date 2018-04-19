@@ -9,4 +9,5 @@ public interface TeacherService extends Service<Teacher> {
     int addTeacherBatch(List<Teacher> list);
     /*Teacher authenticTeacher(String teacherNameOrEmail,String teacherPassword);*/
     Teacher addSingleTeacher(Teacher teacher);
+    void updateTeacher(String status,int id);
 }

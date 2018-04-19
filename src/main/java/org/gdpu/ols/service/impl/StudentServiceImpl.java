@@ -78,6 +78,11 @@ public class StudentServiceImpl extends AbstractService<Student> implements Stud
         return false;
     }
 
+    @Override
+    public void updateStudentStatus(String status, int id,int teacherId) {
+        this.studentMapper.updateStudentStatus(status,id,teacherId);
+    }
+
     private int addAndUpdateProcess(List<Student> studentList,String method){
         if (studentList!=null && !studentList.isEmpty()){
             Student student=null;

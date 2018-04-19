@@ -1,0 +1,109 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="width: 150px;">登录名</th>
+            <th>真实姓名</th>
+            <th>毕业院校</th>
+            <th>学位</th>
+            <th>操作</th>
+        </tr>
+
+        </thead>
+        <tbody id="teacherTable">
+        </tbody>
+    </table>
+    <div class="row content">
+        <div id="teacherPaginator" style="text-align: center;cursor:pointer;"><ul id="teacherPageLimit"></ul></div>
+    </div>
+</div>
+<script>
+    $(document).ready(
+        loadTeacherInfo(1,10)
+    );
+
+    var selfTeacherPagecount;
+    var selfTeacherPageNum;
+    function loadTeacherInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/info/getAssessTeacherMessage',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showTeacherInfo(data);
+            }
+        });
+    }
+    function loadTeacherPaginator() {
+        $('#teacherPageLimit').bootstrapPaginator({
+            currentPage: selfTeacherPageNum,
+            totalPages: selfTeacherPagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadTeacherInfo(page,10);
+            }
+        });
+    }
+    function showTeacherInfo(data) {
+        var data = data.data;
+        selfTeacherPagecount = data.pages;
+        selfTeacherPageNum = data.pageNum;
+        var selfTeacherList=data.list;
+        var htm='';
+        $('#teacherTable').html('');
+        $.each(selfTeacherList,function (id,teacher) {
+            htm+="<tr>\n" +
+                "                <th>"+teacher.studentName+"</th>\n" +
+                "                <th>"+teacher.realName+"</th>\n" +
+                "                <th>"+teacher.university+"</th>\n" +
+                "                <th>"+teacher.degree+"</th>\n" +
+                "                <th><button class='btn btn-success' onclick=\"agreeApply("+teacher.id+")\">通过</button></th>\n" +
+                "            </tr>";
+            htm+="<tr><th>个人介绍：</th><th colspan=\"3\">"+teacher.selfIntroduction+"</th>" +
+                "<th><button class=\"btn btn-danger\" onclick=\"rejectApply("+teacher.id+")\">拒绝</button></th></th></tr>";
+        });
+
+        $('#teacherTable').append(htm);
+        loadTeacherPaginator();
+    }
+
+    function agreeApply(id) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/teacher/approve/'+id,
+            type:'GET',
+            success:function (data) {
+                    loadTeacherInfo(1,10);
+            }
+        })
+    }
+    function rejectApply(id) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/teacher/reject/'+id,
+            type:'GET',
+            success:function (data) {
+                loadTeacherInfo(1,10);
+            }
+        })
+    }
+</script>
+</html>

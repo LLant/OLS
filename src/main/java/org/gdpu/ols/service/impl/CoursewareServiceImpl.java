@@ -35,4 +35,9 @@ public class CoursewareServiceImpl extends AbstractService<Courseware> implement
         this.coursewareMapper.addSingleCourseware(courseware);
         return courseware;
     }
+
+    @Override
+    public void updateCourseware(String status, int id,int examiner) {
+        this.coursewareMapper.updateCourseware(status,id,examiner);
+    }
 }

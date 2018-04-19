@@ -21,6 +21,7 @@ public class Courseware extends BaseBean {
     private Integer nextCourseware;
     private Integer coursewareType;
     private String coursewarePhotoLocation;
+    private String recommend;
 
     public Courseware(){}
 
@@ -126,5 +127,13 @@ public class Courseware extends BaseBean {
 
     public void setCoursewarePhotoLocation(String coursewarePhotoLocation) {
         this.coursewarePhotoLocation = coursewarePhotoLocation;
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(String recommend) {
+        this.recommend = recommend;
     }
 }

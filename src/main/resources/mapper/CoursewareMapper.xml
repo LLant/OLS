@@ -19,7 +19,7 @@
         <result column="next_courseware" property="nextCourseware"/>
         <result column="courseware_type" property="coursewareType"/>
         <result column="courseware_photo_location" property="coursewarePhotoLocation"/>
-
+        <result column="recommend" property="recommend"/>
     </resultMap>
 
     <insert id="addSingleCourseware" parameterType="org.gdpu.ols.model.Courseware" useGeneratedKeys="true" keyProperty="id">
@@ -31,4 +31,9 @@
         ,#{coursewarePhotoLocation},#{coursewareContent})
     </insert>
 
+    <update id="updateCourseware">
+        UPDATE courseware
+        SET courseware_status=#{status},examiner=#{examiner}
+        WHERE id=#{id}
+    </update>
 </mapper>

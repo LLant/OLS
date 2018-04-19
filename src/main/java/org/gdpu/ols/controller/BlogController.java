@@ -32,15 +32,46 @@ public class BlogController extends BaseController {
     private StudentService studentService;
 
     @GetMapping("/{id:\\d{1,11}}")
-    public ModelAndView courseDetail(@PathVariable int id){
+    public ModelAndView blogDetail(@PathVariable int id){
         ModelAndView modelAndView=new ModelAndView();
-
         return modelAndView;
     }
 
     @GetMapping("/")
     private String blog(){
         return "blog";
+    }
+
+    @GetMapping("/assessBlog")
+    public String getAssessBlog(){
+        return "assessBlog";
+    }
+
+    @ResponseBody
+    @GetMapping("/delete/{blogId:\\d{1,11}}")
+    public String deleteBlog(@PathVariable int blogId){
+        this.blogService.deleteById(blogId);
+        return SUCCESS_CODE;
+    }
+
+    @PostMapping("saveBlog")
+    @ResponseBody
+    public ResponseBean saveBlog(HttpSession session,@RequestBody Blog blog){
+        ResponseBean responseBean=new ResponseBean();
+        Student student= (Student) session.getAttribute(session.getId());
+        blog.setBlogDate(new Date());
+        blog.setAuthorName(student.getStudentName());
+        blog.setUser(student.getId());
+        try {
+            this.blogService.save(blog);
+            responseBean.setResultCode(SUCCESS_CODE);
+        }catch (Exception e){
+            e.printStackTrace();
+            responseBean.setResultCode(ERROR_CODE);
+        }finally {
+            return responseBean;
+        }
+
     }
 
     @ResponseBody

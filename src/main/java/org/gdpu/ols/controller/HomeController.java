@@ -1,19 +1,22 @@
 package org.gdpu.ols.controller;
 
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.gdpu.ols.bean.UserBean;
 import org.gdpu.ols.common.BaseController;
 import org.gdpu.ols.common.ResponseBean;
 import org.gdpu.ols.model.Student;
 import org.gdpu.ols.model.Teacher;
+import org.gdpu.ols.model.ViewCoursewareDetail;
 import org.gdpu.ols.service.StudentService;
 import org.gdpu.ols.service.TeacherService;
+import org.gdpu.ols.service.ViewCoursewareDetailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
+import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -32,18 +35,40 @@ public class HomeController extends BaseController {
     private static final Logger logger= LoggerFactory.getLogger(HomeController.class);
     private static final String ERROR_CODE="9999";
     private static final String SUCCESS_CODE="8888";
+    private static final String DEFAULTPHOTO="/images/defaultPersonHead.jpg";
 
 
     @Resource
     private TeacherService teacherService;
     @Resource
     private StudentService studentService;
+    @Resource
+    private ViewCoursewareDetailService viewCoursewareDetailService;
 
     private ResponseBean responseBean;
 
     @GetMapping("/")
-    public String home(){
-        return "home";
+    public ModelAndView home(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("home");
+
+        Condition condition1=new Condition(Teacher.class);
+        condition1.createCriteria().andCondition("recommend='Y'");
+        List<Teacher> teachers=this.teacherService.findByCondition(condition1);
+        modelAndView.addObject("teachers",teachers);
+
+        Condition condition2=new Condition(ViewCoursewareDetail.class);
+        condition2.createCriteria().andCondition("recommend='Y'");
+        List<ViewCoursewareDetail> recommendCourses=this.viewCoursewareDetailService.findByCondition(condition2);
+
+        modelAndView.addObject("firstRecommend",recommendCourses.get(0));
+        modelAndView.addObject("secondRecommend",recommendCourses.get(1));
+        modelAndView.addObject("thirdRecommend",recommendCourses.get(2));
+
+        List<ViewCoursewareDetail> viewCoursewareDetails=this.viewCoursewareDetailService.getTop5();
+        modelAndView.addObject("coursewares",viewCoursewareDetails);
+
+        return modelAndView;
     }
 
     @GetMapping("/loginOut")
@@ -111,6 +136,7 @@ public class HomeController extends BaseController {
                 student.setStudentEmail(userBean.getEmail());
                 student.setStudentSex("女");
                 student.setStatus("S");
+                student.setPhotoStorageLocation(DEFAULTPHOTO);
                 List<Student> lists=new ArrayList<Student>();
                 lists.add(student);
                 int i=this.studentService.addStudentBatch(lists);
@@ -124,6 +150,7 @@ public class HomeController extends BaseController {
                         responseBean.setResultMessage("学生用户登录成功");
                         responseBean.setData(user);
                         session.setAttribute(session.getId(),user);
+                        session.setAttribute(session.getId()+"learningTime",new Date());
                         session.setMaxInactiveInterval(60*30);
                     }else{
                         responseBean.setResultCode(ERROR_CODE);

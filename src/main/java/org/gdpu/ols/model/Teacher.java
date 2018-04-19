@@ -16,6 +16,8 @@ public class Teacher extends BaseBean{
     private String university;
     private String selfIntroduction;
     private String photoStorageLocation;
+    private String recommend;
+    private String identityStatus;
 
     public Teacher(){}
 
@@ -65,5 +67,21 @@ public class Teacher extends BaseBean{
 
     public void setPhotoStorageLocation(String photoStorageLocation) {
         this.photoStorageLocation = photoStorageLocation;
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(String recommend) {
+        this.recommend = recommend;
+    }
+
+    public String getIdentityStatus() {
+        return identityStatus;
+    }
+
+    public void setIdentityStatus(String identityStatus) {
+        this.identityStatus = identityStatus;
     }
 }

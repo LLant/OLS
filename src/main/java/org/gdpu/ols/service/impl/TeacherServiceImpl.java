@@ -33,6 +33,12 @@ public class TeacherServiceImpl extends AbstractService<Teacher> implements Teac
         return teacher;
     }
 
+    @Override
+    public void updateTeacher(String status, int id) {
+        this.teacherMapper.updateTeacher(status,id);
+    }
+
+
  /*   @Override
     public Teacher authenticTeacher(String teacherNameOrEmail,String teacherPassword) {
         if (teacherNameOrEmail!=null && !"".equals(teacherNameOrEmail)){

@@ -19,42 +19,35 @@
     </ol>
     <div class="carousel-inner" role="listbox">
         <div class="item active">
-            <img class="first-slide"
-                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+            <img class="first-slide" th:src="${firstRecommend.coursewarePhotoLocation}"
                  alt="First slide"/>
             <div class="container">
                 <div class="carousel-caption">
-                    <h1>Example headline.</h1>
-                    <p>Note: If you're viewing this page via a <code>file://</code> URL, the "next" and "previous"
-                        Glyphicon buttons on the left and right might not load/display properly due to web browser
-                        security rules.</p>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+                    <h1 th:text="${firstRecommend.coursewareName}"></h1>
+                    <p th:text="${firstRecommend.coursewareContent}"></p>
+                    <p><a class="btn btn-lg btn-danger" href="#" role="button">立即学习</a></p>
                 </div>
             </div>
         </div>
         <div class="item">
-            <img class="second-slide"
-                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+            <img class="second-slide" th:src="${secondRecommend.coursewarePhotoLocation}"
                  alt="Second slide">
             <div class="container">
                 <div class="carousel-caption">
-                    <h1>Another example headline.</h1>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida
-                        at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+                    <h1 th:text="${secondRecommend.coursewareName}"></h1>
+                    <p th:text="${secondRecommend.coursewareContent}"></p>
+                    <p><a class="btn btn-lg btn-danger" href="#" role="button">立即学习</a></p>
                 </div>
             </div>
         </div>
         <div class="item">
-            <img class="third-slide"
-                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+            <img class="third-slide" th:src="${thirdRecommend.coursewarePhotoLocation}"
                  alt="Third slide"/>
             <div class="container">
                 <div class="carousel-caption">
-                    <h1>One more for good measure.</h1>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida
-                        at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a></p>
+                    <h1 th:text="${thirdRecommend.coursewareName}"></h1>
+                    <p th:text="${thirdRecommend.coursewareContent}"></p>
+                    <p><a class="btn btn-lg btn-danger" href="#" role="button">立即学习</a></p>
                 </div>
             </div>
         </div>
@@ -75,64 +68,19 @@
             <em>新</em>/<em>上</em>/<em>好</em>/<em>课</em>
             <span class="glyphicon glyphicon-bookmark"></span>
         </h3>
-        <div class="col-xs-6 col-md-2 col-md-offset-1">
-            <a href="#" class="thumbnail">
-                <img src="/images/photo.svg" alt="..." style="width: 100%;">
-                <div class="caption">
-                    <h4>Thumbnail label</h4>
-                    <span class="label label-default">SpringBoot</span>
-                    <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                          aria-hidden="true">541</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-xs-6 col-md-2">
-            <a href="#" class="thumbnail">
-                <img src="/images/photo.svg" alt="..." style="width: 100%;">
-                <div class="caption">
-                    <h4>Thumbnail label</h4>
-                    <span class="label label-default">SpringBoot</span>
-                    <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                          aria-hidden="true">541</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-xs-6 col-md-2">
-            <a href="#" class="thumbnail">
-                <img src="/images/photo.svg" alt="..." style="width: 100%;">
-                <div class="caption">
-                    <h4>Thumbnail label</h4>
-                    <span class="label label-default">SpringBoot</span>
-                    <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                          aria-hidden="true">541</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-xs-6 col-md-2">
-            <a href="#" class="thumbnail">
-                <img src="/images/photo.svg" alt="..." style="width: 100%;">
-                <div class="caption">
-                    <h4>Thumbnail label</h4>
-                    <span class="label label-default">SpringBoot</span>
-                    <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                          aria-hidden="true">541</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-xs-6 col-md-2">
-            <a href="#" class="thumbnail">
-                <img src="/images/photo.svg" alt="..." style="width: 100%;">
-                <div class="caption">
-                    <h4>Thumbnail label</h4>
-                    <span class="label label-default">SpringBoot</span>
-                    <span class="label label-default glyphicon glyphicon-user" style="margin-left: 10px;"
-                          aria-hidden="true">541</span>
-                </div>
-            </a>
+        <div class="col-xs-6 col-md-1"></div>
+        <div th:each="courseware:${coursewares}">
+            <div class="col-xs-6 col-md-2">
+                <a href="#" class="thumbnail">
+                    <img th:src="${courseware.coursewarePhotoLocation}" alt="..." style="width: 100%;">
+                    <div class="caption">
+                        <h4 th:text="${courseware.coursewareName}"></h4>
+                        <span class="label label-primary" th:text="${courseware.aspect}"></span>
+                        <span class="label label-primary" style="margin-left: 10px;"
+                              aria-hidden="true" th:text="${courseware.category}"></span>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -142,37 +90,14 @@
             <em>精</em>/<em>英</em>/<em>名</em>/<em>师</em>
             <span class="glyphicon glyphicon-star"></span>
         </h3>
-        <div class="col-xs-10 col-md-4" style="text-align: center!important;">
-            <img class="img-circle"
-                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                 alt="Generic placeholder image" width="140" height="140">
-            <h2>Heading</h2>
-            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies
-                vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
-                cursus magna.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div><!-- /.col-lg-4 -->
-        <div class="col-xs-10 col-md-4" style="text-align: center!important;">
-            <img class="img-circle"
-                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                 alt="Generic placeholder image" width="140" height="140">
-            <h2>Heading</h2>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras
-                mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-                condimentum nibh.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div><!-- /.col-lg-4 -->
-        <div class="col-xs-10 col-md-4" style="text-align: center!important;">
-            <img class="img-circle"
-                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                 alt="Generic placeholder image" width="140" height="140">
-            <h2>Heading</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
-                porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut
-                fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div><!-- /.col-lg-4 -->
-        <!-- /.row -->
+        <div th:each="teacher:${teachers}">
+            <div class="col-xs-10 col-md-4" style="text-align: center!important;">
+                <img class="img-circle" th:src="${teacher.photoStorageLocation}"
+                     alt="Generic placeholder image" width="140" height="140"/>
+                <h3 th:text="${teacher.realName}"></h3>
+                <p th:text="${teacher.selfIntroduction}"></p>
+            </div>
+        </div>
     </div>
 
 

@@ -30,6 +30,7 @@ public class FileController extends BaseController{
 
     private static final String ERROR_CODE="9999";
     private static final String SUCCESS_CODE="8888";
+    private static final String STATUS="通过审核";
     private static Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Resource
@@ -127,7 +128,6 @@ public class FileController extends BaseController{
             }else {
                 file1.setMainFile(0);
             }
-
         }
         file1.setPublishDate(new Date());
         this.fileService.save(file1);
@@ -142,34 +142,21 @@ public class FileController extends BaseController{
         List<ViewCoursewareDetail> list=null;
 
         StringBuilder query=new StringBuilder();
-        int sign=0;
+        query.append("courseware_status='"+STATUS+"'");
         if(!StringUtils.isEmpty(myPageRequest.getCondition())){
-            query.append("courseware_name like '%"+myPageRequest.getCondition()+"%' ");
-            sign++;
+            query.append(" and courseware_name like '%"+myPageRequest.getCondition()+"%' ");
         }
         if(!StringUtils.isEmpty(myPageRequest.getAspect())){
-            if (sign!=0){
-                query.append("and ");
-            }
-            query.append("aspect = '"+myPageRequest.getAspect()+"'");
-            sign++;
+            query.append("and aspect = '"+myPageRequest.getAspect()+"' ");
         }
         if (!StringUtils.isEmpty(myPageRequest.getCategory())){
-            if(sign!=0){
-                query.append("and ");
-            }
-            query.append("category = '"+myPageRequest.getCategory()+"'");
-            sign++;
+            query.append("and category = '"+myPageRequest.getCategory()+"'");
         }
 
-        if(sign==0){
-            list=this.viewCoursewareDetailService.findAll();
-        }else {
-            Condition condition=new Condition(Courseware.class);
-            condition.createCriteria().andCondition(query.toString());
-            condition.setOrderByClause("courseware_publish_date desc");
-            list=this.viewCoursewareDetailService.findByCondition(condition);
-        }
+        Condition condition=new Condition(Courseware.class);
+        condition.createCriteria().andCondition(query.toString());
+        condition.setOrderByClause("courseware_publish_date desc");
+        list=this.viewCoursewareDetailService.findByCondition(condition);
 
         PageInfo pageInfo=new PageInfo(list);
         ResponseBean responseBean=new ResponseBean();

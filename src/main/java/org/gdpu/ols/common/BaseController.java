@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class BaseController {
 
+    protected static final String SUCCESS="SUCCESS";
+    protected static final String ERROR="ERROR";
     private static final String EXCEPTION_TYPE="exception";
     private int EXCEPTION_MESSAGE_SIZE=800;
 

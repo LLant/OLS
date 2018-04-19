@@ -10,9 +10,14 @@
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
     <script type="text/javascript" src="/js/bootstrap-paginator.js"></script>
+    <link rel="stylesheet" href="/css/msgbox.css" />
+    <script type="text/javascript" src="/js/msgbox.js"></script>
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 </head>
 <body>
-<div class="bg-other">
+<div class="bg-other"">
     <div class="user-info">
         <div class="user-pic">
             <div class="user-pic-bg">
@@ -116,7 +121,6 @@
     </div>
 </div>
     <script type="text/javascript">
-
         $(document).ready(function () {
             $.ajax({
                 async:false,
@@ -227,6 +231,7 @@
                 contentType: false, // 注意这里应设为false
                 success:function(data){
                    console.log("success");
+                    ZENG.msgbox.show('修改成功', 1);
                 }
             });
         }

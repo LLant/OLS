@@ -17,6 +17,13 @@
         <result column="courseware_photo_location" property="coursewarePhotoLocation"/>
         <result column="aspect" property="aspect"/>
         <result column="category" property="category"/>
+        <result column="recommend" property="recommend"/>
     </resultMap>
 
+    <select id="getTop5" resultMap="viewCoursewareDetail">
+        SELECT *
+        FROM view_courseware_detail
+        ORDER BY courseware_publish_date DESC
+        limit 5
+    </select>
 </mapper>

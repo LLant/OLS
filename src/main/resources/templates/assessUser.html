@@ -1,0 +1,95 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>头像</th>
+            <th>用户名</th>
+            <th>邮箱</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="studentTable">
+        </tbody>
+    </table>
+    <div class="row content">
+        <div id="studentPaginator" style="text-align: center;cursor:pointer;"><ul id="studentPageLimit"></ul></div>
+    </div>
+</div>
+<script>
+    $(document).ready(
+        loadUserInfo(1,15)
+    );
+    var userPagecount;
+    var userPageNum;
+    function loadUserInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/student/getAllUser',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showUserInfo(data);
+            }
+        });
+    }
+    function loadUserPaginator() {
+        $('#studentPageLimit').bootstrapPaginator({
+            currentPage: userPageNum,
+            totalPages: userPagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadUserInfo(page,15);
+            }
+        });
+    }
+    function showUserInfo(data) {
+        var data = data.data;
+        userPagecount = data.pages;
+        userPageNum = data.pageNum;
+        var userList=data.list;
+        var htm='';
+        $('#studentTable').html('');
+        $.each(userList,function (id,student) {
+            htm+="<tr>\n" +
+                "                <th><span><img src=\""+student.photoStorageLocation+"\" width=\"40\"\n" +
+                "                        height=\"40\" style=\"border-radius: 20px;\"/></span></th>\n" +
+                "                <th>"+student.studentName+"</th>\n" +
+                "                <th>"+student.studentEmail+"</th>\n" +
+                "<th><button class=\"btn btn-danger\" onclick=\"deleteUser("+student.id+")\">删除</button></th>\n" +
+                "            </tr>";
+        });
+        $('#studentTable').append(htm);
+        loadUserPaginator();
+    }
+    function deleteUser(id){
+        $.ajax({
+            url:'http://localhost:8080/OLS/student/delete/'+id,
+            type:'GET',
+            success:function (data) {
+                if (data=='SUCCESS'){
+                    loadUserInfo(1,15);
+                }
+            }
+        })
+    }
+</script>
+</html>

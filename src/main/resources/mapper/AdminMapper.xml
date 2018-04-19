@@ -21,7 +21,7 @@
     <select id="selectOneAdmin" parameterType="java.lang.Integer" resultType="org.gdpu.ols.model.Admin">
         SELECT
         <include refid="column"/>
-        FROM administrators
+        FROM admin
         WHERE  id=#{id}
     </select>
 

@@ -1,0 +1,107 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>课程</th>
+            <th>审核</th>
+            <th>发布时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="courseTable">
+        </tbody>
+    </table>
+    <div class="row content">
+        <div id="coursePaginator" style="text-align: center;cursor:pointer;"><ul id="coursePageLimit"></ul></div>
+    </div>
+</div>
+<script>
+    $(document).ready(
+        loadSelfCourseInfo(1,10)
+    );
+    var selfCoursePagecount;
+    var selfCoursePageNum;
+    function loadSelfCourseInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/course/getAssessCourse',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showSelfCourseInfo(data);
+            }
+        });
+    }
+    function loadSelfCoursePaginator() {
+        $('#coursePageLimit').bootstrapPaginator({
+            currentPage: selfCoursePageNum,
+            totalPages: selfCoursePagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadSelfCourseInfo(page,10);
+            }
+        });
+    }
+    function showSelfCourseInfo(data) {
+        var data = data.data;
+        selfCoursePagecount = data.pages;
+        selfCoursePageNum = data.pageNum;
+        var selfCourseList=data.list;
+        var htm='';
+        $('#courseTable').html('');
+        $.each(selfCourseList,function (id,course) {
+            htm+="<tr>\n" +
+                "                <th>"+course.coursewareName+"</th>\n" +
+                "                <th>"+course.coursewareStatus+"</th>\n" +
+                "                <th>"+formateDate(course.coursewarePublishDate)+"</th>\n" +
+                "                <th><button type='button' class=\"btn btn-info\" " +
+                " onclick=\"showCourseDetail("+course.id+")\">查看</button>&nbsp;&nbsp;" +
+                    "<button class=\"btn btn-success\" onclick=\"agree("+course.id+","+course.author+")\">通过</button>&nbsp;&nbsp;"+
+                "<button class=\"btn btn-danger\" onclick=\"reject("+course.id+","+course.author+")\">不通过</button></th>\n" +
+                "            </tr>";
+        });
+        $('#courseTable').append(htm);
+        loadSelfCoursePaginator();
+    }
+    function agree(id,author) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/course/approve/'+id+'/'+author,
+            type:'GET',
+            success:function (data) {
+                loadSelfCourseInfo(1,10);
+            }
+        })
+    }
+    function reject(id,author) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/course/reject/'+id+'/'+author,
+            type:'GET',
+            success:function (data) {
+                loadSelfCourseInfo(1,10);
+            }
+        })
+    }
+    function showCourseDetail(id) {
+        window.location.href="/OLS/course/"+id;
+    }
+</script>
+</html>

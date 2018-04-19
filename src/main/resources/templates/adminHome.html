@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLS</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link href="/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="/css/sidebar-menu.css">
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="/js/sidebar-menu.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-paginator.js"></script>
+    <style type="text/css">
+        .main-sidebar{
+            position: absolute;
+            top: 0;
+            left: 0;
+
+
+
+        }
+        .right-content{
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 250px;
+            height: 100%;
+            min-height: 100%;
+            width: 1080px;
+            word-wrap: break-word;
+        }
+        .fixed{
+            position:fixed;
+
+            height: 640px;
+            min-height: 100%;
+            width: 230px;
+            background-color: #222d32;
+        }
+    </style>
+
+</head>
+<body>
+
+    <aside class="main-sidebar">
+        <section  class="sidebar fixed"  >
+            <ul class="sidebar-menu">
+                <li class="header">主导航</li>
+                <li class="treeview">
+                    <a href="#">
+                        <span>课件管理</span></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="javascript:changeRight(0)">课件审核</a></li>
+                        <li><a href="javascript:changeRight(1)">课件分类管理</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <span>用户管理</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="javascript:changeRight(2)">账号管理</a></li>
+                        <li><a href="javascript:changeRight(3)">讲师申请审核</a></li>
+                    </ul>
+                </li>
+                </li>
+                <li><a href="#"><span>评论管理</span></a></li>
+                <li><a href="javascript:changeRight(5)"><span>博文管理</span></a></li>
+                <li class="header">其它</li>
+                <li><a href="javascript:changeRight(6)"><span>退出系统</span></a></li>
+            </ul>
+        </section>
+        <div class="right-content" id="rightContent">
+        </div>
+    </aside>
+
+<script>
+    $.sidebarMenu($('.sidebar-menu'));
+
+    function changeRight(id) {
+        console.log(id);
+        switch (id){
+            case 0:{
+                $('#rightContent').load("http://localhost:8080/OLS/pageSelector/assessCourseware/"/*,data,callback*/);
+            };break;
+            case 1:{
+                $('#rightContent').load("http://localhost:8080/OLS/pageSelector/managerTag/");
+            };break;
+            case 2:{
+                $('#rightContent').load("http://localhost:8080/OLS/pageSelector/assessUser/");
+            };break;
+            case 3:{
+                $('#rightContent').load("http://localhost:8080/OLS/pageSelector/assessTeacher/");
+            };break;
+            case 4:{};break;
+            case 5:{
+                $('#rightContent').load("http://localhost:8080/OLS/blog/assessBlog/");
+            };break;
+            case 6:{
+                $.ajax({
+                    type:'POST',
+                    url:'http://localhost:8080/OLS/admin/loginOut/',
+                    success:function (data) {
+                        if(data='8888'){
+                            window.location.href="/OLS/admin/";
+                        }
+                    }
+                });
+            };break;
+        }
+    }
+
+    function formateDate(fm) {
+        var date = new Date(fm);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+
+        if (month >= 1 && month <= 9) {
+            month = '0' + month;
+        }
+        if (day >= 1 && day <= 9) {
+            day = '0' + day;
+        }
+        if (hour >= 0 && hour <= 9) {
+            hour = '0' + hour;
+        }
+        if (minute >= 0 && minute <= 9) {
+            minute = '0' + minute;
+        }
+        if (second >= 0 && second <= 9) {
+            second = '0' + second;
+        }
+        return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+    }
+</script>
+
+</body>
+</html>
