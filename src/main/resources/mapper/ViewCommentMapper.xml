@@ -14,7 +14,8 @@
         <result column="courseware_id" property="coursewareId"/>
         <result column="photo_storage_location" property="photoStorageLocation"/>
         <result column="reply_content" property="replyContent"/>
-        <result column="is_read" property="read"/>
+        <result column="is_read" property="isRead"/>
+        <result column="admin_read" property="adminRead"/>
     </resultMap>
 
 </mapper>

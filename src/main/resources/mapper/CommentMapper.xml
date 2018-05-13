@@ -13,7 +13,13 @@
         <result column="comment_author" property="commentauthor"/>
         <result column="star" property="star"/>
         <result column="reply_content" property="replyContent"/>
-        <result column="is_read" property="read"/>
+        <result column="is_read" property="isRead"/>
+        <result column="admin_read" property="adminRead"/>
     </resultMap>
 
+    <update id="updateCommentAssessStatus">
+        UPDATE comment
+        SET admin_read=#{status}
+        WHERE id=#{id}
+    </update>
 </mapper>

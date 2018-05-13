@@ -74,11 +74,11 @@ public class FileController extends BaseController{
             coursewareId=courseware.getId();
         }
         try {
-            if (!photo.isEmpty()) {
-                this.saveFile(photo, savePath,user.getId(),coursewareId);
-            }
             if (!video.isEmpty()) {
                 this.saveFile(video, savePath,user.getId(),coursewareId);
+            }
+            if (!photo.isEmpty()) {
+                this.saveFile(photo, savePath,user.getId(),coursewareId);
             }
             if (attach!=null) {
                 this.saveFile(attach, savePath,user.getId(),coursewareId);

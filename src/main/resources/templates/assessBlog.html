@@ -124,8 +124,7 @@
                 "            </div>\n" +
                 "            <div class=\"modal-body\"><p id='blogModalContent'>"+blog.blogContent+"</p><span class='label label-default'>"+blog.authorName+"</span>&nbsp;&nbsp;<span class=\"label label-info\">"+formateDate(blog.blogDate)+"</span></div>\n" +
                 "            <div class=\"modal-footer\">\n" +
-                "                <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭</button>\n" +
-                "                <button type=\"button\" class=\"btn btn-danger\" id=\"deleteButton\" data-dismiss=\"modal\">删除</button>\n" +
+                "                <button type=\"button\" class=\"btn btn-danger\" id=\"deleteButton\" data-dismiss=\"modal\" onclick=\"deleteBlog("+blog.id+")\">删除</button>\n" +
                 "            </div>\n" +
                 "        </div>\n" +
                 "    </div>\n" +
@@ -163,16 +162,16 @@
     function subContent(str){
         return str.substring(0,120)+'...';
     }
-    $('#deleteButton').on('click',function () {
+    function deleteBlog(id) {
         console.log("11111111111111111");
         $.ajax({
-            url:'http://localhost:8080/OLS/blog/reject/'+id,
-            type:'GET',
-            success:function (data) {
-                loadBlogInfo(page, 12);
+            url: 'http://localhost:8080/OLS/blog/delete/' + id,
+            type: 'GET',
+            success: function (data) {
+                loadBlogInfo(1, 12);
             }
         })
-    });
+    }
 </script>
 </body>
 </html>

@@ -69,7 +69,7 @@
                     </ul>
                 </li>
                 </li>
-                <li><a href="#"><span>评论管理</span></a></li>
+                <li><a href="javascript:changeRight(4)"><span>评论管理</span></a></li>
                 <li><a href="javascript:changeRight(5)"><span>博文管理</span></a></li>
                 <li class="header">其它</li>
                 <li><a href="javascript:changeRight(6)"><span>退出系统</span></a></li>
@@ -97,7 +97,9 @@
             case 3:{
                 $('#rightContent').load("http://localhost:8080/OLS/pageSelector/assessTeacher/");
             };break;
-            case 4:{};break;
+            case 4:{
+                $('#rightContent').load("http://localhost:8080/OLS/pageSelector/assessComment/");
+            };break;
             case 5:{
                 $('#rightContent').load("http://localhost:8080/OLS/blog/assessBlog/");
             };break;

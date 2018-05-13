@@ -1,4 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
+<script type="text/javascript" src="/js/bootstrap-paginator.js"></script>
 <div>
     <table class="table">
         <thead>
@@ -85,6 +86,7 @@
             url:'http://localhost:8080/OLS/student/delete/'+id,
             type:'GET',
             success:function (data) {
+
                 if (data=='SUCCESS'){
                     loadUserInfo(1,15);
                 }

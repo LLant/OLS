@@ -17,6 +17,7 @@ public class ViewComment extends BaseBean{
     private Integer coursewareId;
     private String photoStorageLocation;
     private String isRead;
+    private String adminRead;
 
     public Integer getId() {
         return id;
@@ -88,5 +89,13 @@ public class ViewComment extends BaseBean{
 
     public void setIsRead(String isRead) {
         this.isRead = isRead;
+    }
+
+    public String getAdminRead() {
+        return adminRead;
+    }
+
+    public void setAdminRead(String adminRead) {
+        this.adminRead = adminRead;
     }
 }

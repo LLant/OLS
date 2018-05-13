@@ -10,10 +10,7 @@ import org.gdpu.ols.service.CommentService;
 import org.gdpu.ols.service.MessageService;
 import org.gdpu.ols.service.ViewCommentService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.Resource;
@@ -27,6 +24,7 @@ public class CommentController extends BaseController{
 
     private static final String ERROR_CODE="9999";
     private static final String SUCCESS_CODE="8888";
+    private static final String ADMINREAD="Y";
 
     @Resource
     private CommentService commentService;
@@ -72,6 +70,7 @@ public class CommentController extends BaseController{
         comment.setCommentAuthor(student.getId());
         comment.setCommentDate(new Date());
         comment.setIsRead("N");
+        comment.setAdminRead("N");
         try {
             this.commentService.save(comment);
             responseBean.setResultCode(SUCCESS_CODE);
@@ -83,6 +82,21 @@ public class CommentController extends BaseController{
         }
 
     }
+
+
+    @ResponseBody
+    @GetMapping("/read/{commentId:\\d{1,11}}")
+    public String readComment(@PathVariable int commentId){
+        this.commentService.updateCommentAssessStatus(ADMINREAD,commentId);
+        return SUCCESS;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/getAssessComment")
+    public ResponseBean getAssessComment(@RequestBody MyPageRequest myPageRequest){
+        return this.pageQuery(myPageRequest,"admin_read='N'");
+    }
+
 
     @ResponseBody
     @PostMapping(value = "/getComment")

@@ -28,4 +28,9 @@ public class PageSelectorController extends BaseController {
     public String managerTag(){
         return "managerTag";
     }
+
+    @GetMapping("/assessComment")
+    public String assessComment(){
+        return "assessComment";
+    }
 }

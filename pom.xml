@@ -57,6 +57,11 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 			<exclusions>
 				<exclusion>
@@ -125,10 +130,18 @@
 			<!--<scope>test</scope>-->
 		<!--</dependency>-->
 		<!-- HikariCP 连接池组件-->
-		<dependency>
+		<!--<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<!-- 版本号可以不用指定，Spring Boot会选用合适的版本 -->
+			&lt;!&ndash; 版本号可以不用指定，Spring Boot会选用合适的版本 &ndash;&gt;
+		</dependency>-->
+
+
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.0.18</version>
 		</dependency>
 		<!--分页插件-->
 		<dependency>

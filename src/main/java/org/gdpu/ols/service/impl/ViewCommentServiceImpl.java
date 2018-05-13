@@ -1,6 +1,7 @@
 package org.gdpu.ols.service.impl;
 
 import org.gdpu.ols.core.AbstractService;
+import org.gdpu.ols.mapper.ViewCommentMapper;
 import org.gdpu.ols.mapper.ViewCoursewareDetailMapper;
 import org.gdpu.ols.model.ViewComment;
 import org.gdpu.ols.model.ViewCoursewareDetail;
@@ -16,5 +17,8 @@ import java.util.List;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ViewCommentServiceImpl extends AbstractService<ViewComment> implements ViewCommentService{
+
+    @Resource
+    private ViewCommentMapper viewCommentMapper;
 
 }

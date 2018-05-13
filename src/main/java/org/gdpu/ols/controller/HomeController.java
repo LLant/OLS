@@ -1,14 +1,11 @@
 package org.gdpu.ols.controller;
 
+import org.gdpu.ols.bean.CourseBean;
 import org.gdpu.ols.bean.UserBean;
 import org.gdpu.ols.common.BaseController;
 import org.gdpu.ols.common.ResponseBean;
-import org.gdpu.ols.model.Student;
-import org.gdpu.ols.model.Teacher;
-import org.gdpu.ols.model.ViewCoursewareDetail;
-import org.gdpu.ols.service.StudentService;
-import org.gdpu.ols.service.TeacherService;
-import org.gdpu.ols.service.ViewCoursewareDetailService;
+import org.gdpu.ols.model.*;
+import org.gdpu.ols.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -44,8 +41,49 @@ public class HomeController extends BaseController {
     private StudentService studentService;
     @Resource
     private ViewCoursewareDetailService viewCoursewareDetailService;
+    @Resource
+    private CoursewareService coursewareService;
+    @Resource
+    private FileService fileService;
 
     private ResponseBean responseBean;
+
+    @GetMapping("/{id:\\d{1,11}}")
+    public ModelAndView courseDetail(@PathVariable int id, HttpSession session){
+
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("video");
+        Courseware courseware=null;
+        courseware=this.coursewareService.findById(id);
+        Condition condition=new Condition(File.class);
+        condition.createCriteria().andCondition("courseware="+courseware.getId()+" and main_file=1");
+        List<File> files=null;
+        files=this.fileService.findByCondition(condition);
+
+        CourseBean courseBean=new CourseBean();
+        for (File file:files){
+            if(file.getStorageLocation()!=null){
+                switch (file.getMainFile()){
+                    case 1:courseBean.setVideoLocation(file.getStorageLocation());break;
+                    case 2:courseBean.setAttachLocation(file.getStorageLocation());break;
+                }
+
+            }
+        }
+        Teacher teacher=this.teacherService.findById(courseware.getAuthor());
+        courseBean.setAuthor(courseware.getAuthor());
+        courseBean.setAuthorRealName(teacher.getRealName());
+        courseBean.setAuthorDegree(teacher.getDegree());
+        courseBean.setAuthorPhotoLocation(teacher.getPhotoStorageLocation());
+        courseBean.setCoursewareContent(courseware.getCoursewareContent());
+        courseBean.setCoursewareIntroduction(toList(courseware.getCoursewareIntroduction()));
+        courseBean.setCoursewareName(courseware.getCoursewareName());
+        courseBean.setCoursewarePublishDate(courseware.getCoursewarePublishDate());
+        courseBean.setCoursewareTip(toList(courseware.getCoursewareTip()));
+        courseBean.setId(courseware.getId());
+        modelAndView.addObject("courseware",courseBean);
+        return modelAndView;
+    }
 
     @GetMapping("/")
     public ModelAndView home(){
@@ -233,4 +271,18 @@ public class HomeController extends BaseController {
 //        }
 //        return condition;
 //    }
+
+    private List<String> toList(String str){
+        List<String> stringList=null;
+        String[] strArray=str.split(";");
+        if (strArray.length>0){
+            int i=1;
+            stringList=new ArrayList<String>();
+            for (String string:strArray){
+                stringList.add(i+"、"+string);
+                i++;
+            }
+        }
+        return stringList;
+    }
 }

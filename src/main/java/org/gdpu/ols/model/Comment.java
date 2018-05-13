@@ -16,6 +16,7 @@ public class Comment extends BaseBean{
     private Long star;              //点赞次数
     private String replyContent;
     private String isRead;
+    private String adminRead;
 
     public Comment(){}
 
@@ -81,5 +82,13 @@ public class Comment extends BaseBean{
 
     public void setIsRead(String isRead) {
         this.isRead = isRead;
+    }
+
+    public String getAdminRead() {
+        return adminRead;
+    }
+
+    public void setAdminRead(String adminRead) {
+        this.adminRead = adminRead;
     }
 }

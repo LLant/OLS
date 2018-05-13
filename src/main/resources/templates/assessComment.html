@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>课程</th>
+            <th>评论</th>
+            <th>回复</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="comment-content">
+        </tbody>
+    </table>
+    <div class="row content">
+        <div id="commentPaginator" style="text-align: center;cursor:pointer;"><ul id="commentPageLimit"></ul></div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(
+        loadCommentInfo(1,20)
+    );
+
+    var commentPagecount;
+    var commentPageNum;
+    function loadCommentInfo(offset,limit) {
+        $.ajax({
+            url:'http://localhost:8080/OLS/comment/getAssessComment',
+            type:'POST',
+            data:JSON.stringify({offset:offset,limit:limit}),
+            contentType:'application/json;charset=UTF-8',
+            success:function (data) {
+                showCommentInfo(data);
+            }
+        });
+    }
+    function loadCommentPaginator() {
+        $('#commentPageLimit').bootstrapPaginator({
+            currentPage: commentPageNum,
+            totalPages: commentPagecount,
+            size: "normal",
+            bootstrapMajorVersion: 3,
+            alignment: "right",
+            numberOfPages: 6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }//默认显示的是第一页。
+            },
+            onPageClicked:function (event,originalEvent,type,page) {
+                //给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字
+                loadCommentInfo(page,20);
+            }
+        });
+    }
+    function showCommentInfo(data) {
+        var data = data.data;
+        commentPagecount = data.pages;
+        commentPageNum = data.pageNum;
+        var commentList=data.list;
+        var htm='';
+        $('#comment-content').html('');
+        $.each(commentList,function (id,comment) {
+            htm+="<tr>\n" +
+                "                <th>"+comment.coursewareName+"</th>\n" +
+                "                <th>"+comment.commentContent+"</th>\n" +
+                "                <th>"+judgeNull(comment.replyContent)+"</th>\n" +
+                "<th><button class=\"btn btn-primary\" onclick=\"readComment("+comment.id+")\">已阅</button></th>\n" +
+                "            </tr>";
+        });
+        $('#comment-content').append(htm);
+        loadCommentPaginator();
+    }
+    function judgeNull(data) {
+        if(data==null){
+            return '';
+        }else {
+            return data;
+        }
+    }
+
+    function readComment(id){
+        $.ajax({
+            url:'http://localhost:8080/OLS/comment/read/'+id,
+            type:'GET',
+            success:function (data) {
+                console.log(data);
+                if (data=='SUCCESS'){
+                    loadCommentInfo(1,20);
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>
